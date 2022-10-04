@@ -1,0 +1,14 @@
+version: '3'
+services:
+    webapi:
+        build:
+            context: avion-api
+            dockerfile: Dockerfile
+        volumes:
+            - ./avion-api/api:/app/api
+            - ./avion-api/domain:/app/domain
+            - ./avion-api/flyway:/flyway
+            - ./local/db:/db
+        ports:
+            - "5000:5000"
+        restart: "unless-stopped"

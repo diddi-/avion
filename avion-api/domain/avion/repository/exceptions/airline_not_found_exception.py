@@ -1,0 +1,4 @@
+
+
+class AirlineNotFoundException(Exception):
+    pass
