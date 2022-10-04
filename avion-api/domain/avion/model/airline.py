@@ -23,11 +23,11 @@ class Airline:
         self._id = table_id
 
     @property
-    def created_at(self) -> datetime.datetime:
+    def created_at(self) -> Optional[datetime.datetime]:
         return self._created_at
 
     @created_at.setter
-    def created_at(self, date: datetime.datetime):
+    def created_at(self, date: datetime.datetime) -> None:
         if self._created_at is not None:
             raise ValueError("Changing 'created at' is not allowed")
         self._created_at = date
