@@ -1,7 +1,7 @@
 from flask_restx import Namespace, OrderedModel, fields as restx_fields
 from marshmallow import post_load, Schema, fields
 
-from avion.api.input.create_airline_params import CreateAirlineParams
+from avion.parameters.create_airline_params import CreateAirlineParams
 
 
 class CreateAirlineParamsSchema(Schema):

@@ -4,7 +4,7 @@ import sqlite3
 from sqlite3 import Row
 from typing import List
 
-from avion.api.input.create_airline_params import CreateAirlineParams
+from avion.parameters.create_airline_params import CreateAirlineParams
 from avion.model.airline import Airline
 from avion.repository.exceptions.airline_not_found_exception import AirlineNotFoundException
 

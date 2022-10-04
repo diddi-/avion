@@ -5,7 +5,7 @@ from typing import cast, List
 from avion.api.schema.airline_schema import AirlineSchema
 from avion.model.airline import Airline
 from avion.api.input.schema.create_airline_params_schema import CreateAirlineParamsSchema
-from avion.api.input.create_airline_params import CreateAirlineParams
+from avion.parameters.create_airline_params import CreateAirlineParams
 from avion.repository.airline_repository import AirlineRepository
 
 namespace = Namespace("airline")
