@@ -4,6 +4,7 @@ from flask_restx import Api
 from avion.api.controller.airline_controller import namespace as airline_namespace
 from avion.api.controller.airline_name_controller import namespace as airline_name_namespace
 from avion.api.controller.status_controller import namespace as status_namespace
+from avion.api.controller.user_account_controller import namespace as account_namespace
 
 
 def create_app() -> Flask:
@@ -15,4 +16,6 @@ def create_app() -> Flask:
     api.add_namespace(status_namespace, "/status")
     api.add_namespace(airline_namespace, "/airline")
     api.add_namespace(airline_name_namespace, "/airline")
+    api.add_namespace(account_namespace, "/account")
+
     return app
