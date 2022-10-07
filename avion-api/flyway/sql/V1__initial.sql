@@ -11,5 +11,8 @@ create table user_account (
     created_at text default current_timestamp,
     firstname varchar(100) not null,
     lastname varchar(100) not null,
-    email varchar(255) not null unique
+    email varchar(255) not null unique,
+    username varchar(255) not null unique,
+    password varchar(255) not null,
+    salt varchar(255) not null
 );

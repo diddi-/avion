@@ -12,16 +12,16 @@ class UserAccountRepository:
     def __init__(self, database: str = "/db/airline-api.db"):
         self._db = database
 
-    def create(self, params: CreateUserAccountParams) -> UserAccount:
+    def create(self, params: CreateUserAccountParams, hashed_password: str, salt: str) -> UserAccount:
         user = UserAccount(params.firstname, params.lastname)
         user.created_at = datetime.datetime.now(datetime.timezone.utc)
         user.email = params.email
         with contextlib.closing(sqlite3.connect(self._db)) as conn:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
-            cur.execute("INSERT INTO user_account (created_at, firstname, lastname, email) "
-                        "VALUES (?,?,?,?)",
-                        (user.created_at, user.firstname, user.lastname, user.email))
+            cur.execute("INSERT INTO user_account (created_at, firstname, lastname, email, username, password, salt) "
+                        "VALUES (?,?,?,?,?,?,?)",
+                        (user.created_at, user.firstname, user.lastname, user.email, user.email, hashed_password, salt))
             conn.commit()
             user.id = cur.lastrowid
         return user
@@ -36,6 +36,22 @@ class UserAccountRepository:
             for row in rows:
                 users.append(self._row_to_user_account(row))
         return users
+
+    def validate_credentials(self, username: str, password: str) -> bool:
+        with contextlib.closing(sqlite3.connect(self._db)) as conn:
+            conn.row_factory = sqlite3.Row
+            cur = conn.cursor()
+            cur.execute("SELECT COUNT(*) FROM user_account WHERE username=? AND password=?",
+                        (username, password))
+            count = cur.fetchone()[0]
+            return count == 1
+
+    def get_salt(self, username: str) -> str:
+        with contextlib.closing(sqlite3.connect(self._db)) as conn:
+            conn.row_factory = sqlite3.Row
+            cur = conn.cursor()
+            cur.execute("SELECT salt FROM user_account WHERE username=?", (username,))
+            return cur.fetchone()[0]
 
     @staticmethod
     def _row_to_user_account(row: Row) -> UserAccount:

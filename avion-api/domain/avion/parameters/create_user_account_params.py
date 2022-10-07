@@ -6,3 +6,4 @@ class CreateUserAccountParams:
     firstname: str
     lastname: str
     email: str
+    password: str

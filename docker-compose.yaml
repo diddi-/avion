@@ -9,6 +9,9 @@ services:
             - ./avion-api/domain:/app/domain
             - ./avion-api/flyway:/flyway
             - ./local/db:/db
+            - ./local/avion.conf:/etc/avion.conf
         ports:
             - "5000:5000"
+        environment:
+            - AVION_CONFIG=/etc/avion.conf
         restart: "unless-stopped"

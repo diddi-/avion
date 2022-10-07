@@ -13,6 +13,7 @@ setuptools.setup(
     include_package_data=True,
     license="MIT",
     install_requires=[
+        "flask-jwt-extended"
     ],
     extras_require={
         "test": [
