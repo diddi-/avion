@@ -3,6 +3,7 @@ create table company (
     profile_id integer not null,
     created_at text DEFAULT CURRENT_TIMESTAMP,
     name varchar(100) not null unique,
+    balance int not null default 0,
     foreign key(profile_id) references profile(id)
 );
 
@@ -23,5 +24,6 @@ create table profile (
     created_at text default current_timestamp,
     firstname varchar(100) not null,
     lastname varchar(100) not null,
+    balance int not null default 0,
     foreign key(user_account_id) references user_account(id)
 )

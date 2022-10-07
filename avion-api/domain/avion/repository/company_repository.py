@@ -20,9 +20,9 @@ class CompanyRepository:
         with contextlib.closing(sqlite3.connect(self._db)) as conn:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
-            cur.execute("INSERT INTO company (created_at, profile_id, name) "
-                        "VALUES (?,?,?)",
-                        (company.created_at, params.owner_id, params.name))
+            cur.execute("INSERT INTO company (created_at, profile_id, name, balance) "
+                        "VALUES (?,?,?,?)",
+                        (company.created_at, params.owner_id, params.name,params.balance))
             conn.commit()
             company.id = cur.lastrowid
         return company

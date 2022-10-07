@@ -1,12 +1,14 @@
 import configparser
 import os
 
+from avion.config.game_config import GameConfig
 from avion.config.jwt_config import JwtConfig
 
 
 class Config:
     def __init__(self) -> None:
         self.jwt = JwtConfig()
+        self.game = GameConfig()
 
     def load(self) -> None:
         parser = configparser.ConfigParser()
@@ -15,6 +17,8 @@ class Config:
         for section in parser.sections():
             if section == JwtConfig.SECTION_NAME:
                 self.jwt = JwtConfig.from_section(parser[section])
+            elif section == GameConfig.SECTION_NAME:
+                self.game = GameConfig.from_section(parser[section])
             else:
                 raise ValueError(f"'{section}' is not a valid configuration section")
 

@@ -11,6 +11,7 @@ class Profile:
         self._owner_id: Optional[int] = None
         self._firstname = firstname
         self._lastname = lastname
+        self._balance = 0
 
     @property
     def firstname(self) -> str:
@@ -51,3 +52,11 @@ class Profile:
     @owner_id.setter
     def owner_id(self, value: int) -> None:
         self._owner_id = value
+
+    @property
+    def balance(self) -> int:
+        return self._balance
+
+    @balance.setter
+    def balance(self, value: int) -> None:
+        self._balance = value
