@@ -2,6 +2,6 @@ from dataclasses import dataclass
 
 
 @dataclass
-class CreateAirlineParams:
+class CreateCompanyParams:
     name: str
     owner_id: int

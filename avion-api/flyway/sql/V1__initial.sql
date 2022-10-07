@@ -1,4 +1,4 @@
-create table airline (
+create table company (
     id integer primary key,
     profile_id integer not null,
     created_at text DEFAULT CURRENT_TIMESTAMP,

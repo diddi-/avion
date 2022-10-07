@@ -2,7 +2,7 @@ import datetime
 from typing import Optional
 
 
-class Airline:
+class Company:
     def __init__(self, name: str):
         self._id: Optional[int] = None
         self._name = name
