@@ -10,6 +10,7 @@ class UserAccount:
         self._firstname = firstname
         self._lastname = lastname
         self._email: Optional[str] = None
+        self._username = self._email
 
     @property
     def firstname(self) -> str:
@@ -50,3 +51,11 @@ class UserAccount:
     @email.setter
     def email(self, value: str) -> None:
         self._email = value
+
+    @property
+    def username(self) -> Optional[str]:
+        return self._username
+
+    @username.setter
+    def username(self, value: str) -> None:
+        self._username = value

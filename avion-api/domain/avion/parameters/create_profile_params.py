@@ -3,6 +3,7 @@ from typing import Optional
 
 
 @dataclass
-class CreateAirlineParams:
-    name: str
+class CreateProfileParams:
+    firstname: str
+    lastname: str
     owner_id: Optional[int] = None

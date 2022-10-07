@@ -16,12 +16,13 @@ class AirlineRepository:
     def create(self, params: CreateAirlineParams) -> Airline:
         airline = Airline(params.name)
         airline.created_at = datetime.datetime.now(datetime.timezone.utc)
+        airline.owner_id = params.owner_id
         with contextlib.closing(sqlite3.connect(self._db)) as conn:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
-            cur.execute("INSERT INTO airline (created_at, name) "
-                        "VALUES (?,?)",
-                        (airline.created_at, params.name))
+            cur.execute("INSERT INTO airline (created_at, profile_id, name) "
+                        "VALUES (?,?,?)",
+                        (airline.created_at, params.owner_id, params.name))
             conn.commit()
             airline.id = cur.lastrowid
         return airline

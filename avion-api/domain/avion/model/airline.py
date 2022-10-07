@@ -7,6 +7,7 @@ class Airline:
         self._id: Optional[int] = None
         self._name = name
         self._created_at: Optional[datetime.datetime] = None
+        self._owner_id: Optional[int] = None
 
     @property
     def name(self) -> str:
@@ -31,3 +32,11 @@ class Airline:
         if self._created_at is not None:
             raise ValueError("Changing 'created at' is not allowed")
         self._created_at = date
+
+    @property
+    def owner_id(self) -> Optional[int]:
+        return self._owner_id
+
+    @owner_id.setter
+    def owner_id(self, value: Optional[int]) -> None:
+        self._owner_id = value

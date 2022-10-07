@@ -9,6 +9,7 @@ from avion.api.controller.jwt_test_controller import namespace as jwt_test_names
 from avion.api.controller.login_controller import namespace as login_namespace
 from avion.api.controller.status_controller import namespace as status_namespace
 from avion.api.controller.user_account_controller import namespace as account_namespace
+from avion.api.controller.profile_controller import namespace as profile_namespace
 from avion.config.config import current_config
 
 
@@ -31,5 +32,6 @@ def create_app() -> Flask:
     api.add_namespace(account_namespace, "/account")
     api.add_namespace(login_namespace, "/login")
     api.add_namespace(jwt_test_namespace, "/token")
+    api.add_namespace(profile_namespace, "/profile")
 
     return app

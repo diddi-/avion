@@ -37,6 +37,14 @@ class UserAccountRepository:
                 users.append(self._row_to_user_account(row))
         return users
 
+    def get_user_by_username(self, username: str) -> UserAccount:
+        with contextlib.closing(sqlite3.connect(self._db)) as conn:
+            conn.row_factory = sqlite3.Row
+            cur = conn.cursor()
+            cur.execute("SELECT id, created_at, firstname, lastname, email FROM user_account WHERE username=?",
+                        (username,))
+            return self._row_to_user_account(cur.fetchone())
+
     def validate_credentials(self, username: str, password: str) -> bool:
         with contextlib.closing(sqlite3.connect(self._db)) as conn:
             conn.row_factory = sqlite3.Row
