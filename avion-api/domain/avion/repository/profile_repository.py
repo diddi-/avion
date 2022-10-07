@@ -25,6 +25,16 @@ class ProfileRepository:
             profile.id = cur.lastrowid
         return profile
 
+    def account_has_profile(self, account_id: int, profile_id: int) -> bool:
+        with contextlib.closing(sqlite3.connect(self._db)) as conn:
+            conn.row_factory = sqlite3.Row
+            cur = conn.cursor()
+            cur.execute("SELECT COUNT(*) FROM profile WHERE user_account_id=? AND id=?",
+                        (account_id, profile_id))
+            conn.commit()
+            count = cur.fetchone()[0]
+            return count == 1
+
     @staticmethod
     def _row_to_profile(row: Row) -> Profile:
         profile = Profile(row["firstname"], row["lastname"])

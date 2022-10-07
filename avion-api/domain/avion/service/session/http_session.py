@@ -4,6 +4,7 @@ from avion.model.user_account import UserAccount
 from avion.repository.user_account_repository import UserAccountRepository
 
 
+# Rename to HttpContext?
 class HttpSession:
     def __init__(self, repository: UserAccountRepository = UserAccountRepository()):
         self._repository = repository
