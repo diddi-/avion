@@ -4,6 +4,7 @@ import string
 
 from flask_jwt_extended import create_access_token
 
+from avion.service.account.model.hashed_password import HashedPassword
 from avion.service.account.model.user_account import UserAccount
 from avion.service.account.model.create_user_account_params import CreateUserAccountParams
 from avion.service.account.repository.user_account_repository import UserAccountRepository
@@ -17,17 +18,15 @@ class UserAccountService:
         self._repository = repository
 
     def register(self, params: CreateUserAccountParams) -> UserAccount:
-        alphabet = string.ascii_letters + string.digits
-        salt = ''.join(secrets.choice(alphabet) for _ in range(20))
-        hashed_password = hashlib.sha256(bytes(params.password + salt, "utf-8")).hexdigest()
+        password = HashedPassword(params.password)
         params.password = None  # Don't want to accidentally pass the cleartext around
-        return self._repository.create(params, hashed_password, salt)
+        return self._repository.create(params, password)
 
     def login(self, request: LoginRequest) -> LoginResponse:
         salt = self._repository.get_salt(request.username)
-        hashed_password = hashlib.sha256(bytes(request.password + salt, "utf-8")).hexdigest()
+        password = HashedPassword(request.password, salt)
         request.password = None  # Don't want to accidentally pass the cleartext around
-        if not self._repository.validate_credentials(request.username, hashed_password):
+        if not self._repository.validate_credentials(request.username, password):
             raise ValueError("Invalid credentials")
         return LoginResponse(create_access_token(identity=request.username))
 
