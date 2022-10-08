@@ -12,18 +12,18 @@ class TestUserAccountRepository(TestCase):
         self.initializer.run()
 
     def test_user_account_can_be_created(self) -> None:
-        params = CreateUserAccountParams("John", "Doe", "john@example.com")
-        user = UserAccountRepository(database=self.initializer.db_path).create(params)
+        params = CreateUserAccountParams("John", "Doe", "john@example.com", "secret")
+        user = UserAccountRepository(database=self.initializer.db_path).create(params, "abcde", "1234")
         self.assertIsNotNone(user.id)
 
     def test_get_all_user_accounts(self) -> None:
-        john = CreateUserAccountParams("John", "Doe", "john@example.com")
-        trevor = CreateUserAccountParams("Trevor", "Doe", "trevor@example.com")
+        john = CreateUserAccountParams("John", "Doe", "john@example.com", "secret")
+        trevor = CreateUserAccountParams("Trevor", "Doe", "trevor@example.com", "abcde")
         repository = UserAccountRepository(database=self.initializer.db_path)
-        repository.create(john)
-        repository.create(trevor)
+        repository.create(john, "abcde", "1234")
+        repository.create(trevor, "abcde", "1234")
 
         users = repository.get_all_user_accounts()
-        self.assertEqual(2, len(users))
-        self.assertEqual(users[0].firstname, john.firstname)
-        self.assertEqual(users[1].firstname, trevor.firstname)
+        self.assertEqual(3, len(users))  # Seeded admin user too!
+        self.assertEqual(users[1].firstname, john.firstname)
+        self.assertEqual(users[2].firstname, trevor.firstname)
