@@ -17,12 +17,13 @@ class UserAccountRepository:
         user = UserAccount(params.firstname, params.lastname)
         user.created_at = datetime.datetime.now(datetime.timezone.utc)
         user.email = params.email
+        user.username = params.email  # This should not be done in the repository
         with contextlib.closing(sqlite3.connect(self._db)) as conn:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
             cur.execute("INSERT INTO user_account (created_at, firstname, lastname, email, username, password, salt) "
                         "VALUES (?,?,?,?,?,?,?)",
-                        (user.created_at, user.firstname, user.lastname, user.email, user.email, str(password),
+                        (user.created_at, user.firstname, user.lastname, user.email, user.username, password.password,
                          password.salt))
             conn.commit()
             user.id = cur.lastrowid
@@ -43,8 +44,18 @@ class UserAccountRepository:
         with contextlib.closing(sqlite3.connect(self._db)) as conn:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
-            cur.execute("SELECT id, created_at, firstname, lastname, email FROM user_account WHERE username=?",
-                        (username,))
+            cur.execute(
+                "SELECT id, created_at, firstname, lastname, email, username FROM user_account WHERE username=?",
+                (username,))
+            return self._row_to_user_account(cur.fetchone())
+
+    def get_user_by_id(self, user_id: int) -> UserAccount:
+        with contextlib.closing(sqlite3.connect(self._db)) as conn:
+            conn.row_factory = sqlite3.Row
+            cur = conn.cursor()
+            cur.execute(
+                "SELECT id, created_at, firstname, lastname, email, username FROM user_account WHERE id=?",
+                (user_id,))
             return self._row_to_user_account(cur.fetchone())
 
     def validate_credentials(self, username: str, password: HashedPassword) -> bool:
@@ -52,7 +63,7 @@ class UserAccountRepository:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
             cur.execute("SELECT COUNT(*) FROM user_account WHERE username=? AND password=?",
-                        (username, str(password)))
+                        (username, password.password))
             count = cur.fetchone()[0]
             return count == 1
 
@@ -68,4 +79,6 @@ class UserAccountRepository:
         user = UserAccount(row["firstname"], row["lastname"])
         user.created_at = datetime.datetime.fromisoformat(row["created_at"])
         user.id = row["id"]
+        user.email = row["email"]
+        user.username = row["username"]
         return user

@@ -1,3 +1,5 @@
+import datetime
+from sqlite3 import IntegrityError
 from unittest import TestCase
 
 from avion.service.account.model.create_user_account_params import CreateUserAccountParams
@@ -28,3 +30,50 @@ class TestUserAccountRepository(TestCase):
         self.assertEqual(3, len(users))  # Seeded admin user too!
         self.assertEqual(users[1].firstname, john.firstname)
         self.assertEqual(users[2].firstname, trevor.firstname)
+
+    def test_username_must_be_unique(self) -> None:
+        params = CreateUserAccountParams("John", "Doe", "john@example.com", "secret")
+        repository = UserAccountRepository(database=self.initializer.db_path)
+        repository.create(params, HashedPassword(params.password))
+
+        with self.assertRaises(IntegrityError) as err:
+            repository.create(params, HashedPassword(params.password))
+        self.assertIn("UNIQUE constraint failed: user_account.username", str(err.exception))
+
+    def test_created_at_field_is_set_when_creating_new_account(self) -> None:
+        params = CreateUserAccountParams("John", "Doe", "john@example.com", "secret")
+        user = UserAccountRepository(database=self.initializer.db_path).create(params, HashedPassword(params.password))
+
+        # We loosely check if the created_at is within ten seconds. Not great, but it's good enough(tm)
+        delta = user.created_at - datetime.datetime.now(datetime.timezone.utc)
+        self.assertLess(delta, datetime.timedelta(seconds=10))
+
+    def test_user_can_be_fetched_by_username(self) -> None:
+        params = CreateUserAccountParams("John", "Doe", "john@example.com", "secret")
+        repository = UserAccountRepository(database=self.initializer.db_path)
+        expected_user = repository.create(params, HashedPassword(params.password))
+        actual_user = repository.get_user_by_username(expected_user.username)
+        self.assertEqual(expected_user, actual_user)
+
+    def test_user_can_be_fetched_by_id(self) -> None:
+        params = CreateUserAccountParams("John", "Doe", "john@example.com", "secret")
+        repository = UserAccountRepository(database=self.initializer.db_path)
+        expected_user = repository.create(params, HashedPassword(params.password))
+        actual_user = repository.get_user_by_id(expected_user.id)
+        self.assertEqual(expected_user, actual_user)
+
+    def test_password_can_be_validated(self):
+        params = CreateUserAccountParams("John", "Doe", "john@example.com", "secret")
+        repository = UserAccountRepository(database=self.initializer.db_path)
+        correct_password = HashedPassword(params.password)
+        wrong_password = HashedPassword("wrong-password")
+        user = repository.create(params, correct_password)
+        self.assertTrue(repository.validate_credentials(user.username, correct_password), "Correct password is valid")
+        self.assertFalse(repository.validate_credentials(user.username, wrong_password), "Wrong password is valid")
+
+    def test_salt_can_be_retrieved(self) -> None:
+        params = CreateUserAccountParams("John", "Doe", "john@example.com", "secret")
+        repository = UserAccountRepository(database=self.initializer.db_path)
+        password = HashedPassword("secret")
+        user = repository.create(params, password)
+        self.assertEqual(password.salt, repository.get_salt(user.username))

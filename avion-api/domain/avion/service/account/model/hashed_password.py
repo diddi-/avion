@@ -19,7 +19,8 @@ class HashedPassword:
         return self._salt
 
     def __str__(self) -> str:
-        return self.password
+        # Do not accidentally print to logs or serialize in API responses
+        return "*****"
 
     def __eq__(self, other: Any) -> bool:
         return type(other) == HashedPassword and other.password == self.password

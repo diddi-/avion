@@ -26,9 +26,9 @@ class TestHashedPassword(TestCase):
         self.assertEqual(hashed1.salt, hashed2.salt)
         self.assertEqual(hashed1.password, hashed2.password)
 
-    def test_hashed_password_can_be_cast_to_string(self) -> None:
+    def test_password_cast_to_string_returns_asterisks(self) -> None:
         password = HashedPassword("password")
-        self.assertEqual(password.password, str(password))
+        self.assertEqual("*****", str(password))
 
     def test_passwords_are_equal_when_the_hashed_passwords_are_equal(self) -> None:
         cleartext = "password"

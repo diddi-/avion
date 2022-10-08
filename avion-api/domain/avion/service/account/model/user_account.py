@@ -1,5 +1,5 @@
 import datetime
-from typing import Optional
+from typing import Optional, Any
 
 
 class UserAccount:
@@ -59,3 +59,6 @@ class UserAccount:
     @username.setter
     def username(self, value: str) -> None:
         self._username = value
+
+    def __eq__(self, other: Any) -> bool:
+        return type(other) == UserAccount and other.username == self.username

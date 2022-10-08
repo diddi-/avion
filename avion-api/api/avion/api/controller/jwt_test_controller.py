@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required
 from flask_restx import Namespace, Resource, Api
 
 from avion.api.schema.jwt_access_token_schema import JwtAccessTokenSchema
-from avion.service.account.model.access_token import JwtAccessToken
+from avion.service.account.model.jwt_access_token import JwtAccessToken
 from avion.service.account.user_account_service import UserAccountService
 
 namespace = Namespace("jwt-test")
