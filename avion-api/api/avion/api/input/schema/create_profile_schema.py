@@ -1,7 +1,7 @@
 from flask_restx import Namespace, OrderedModel, fields as restx_fields
 from marshmallow import post_load, Schema, fields
 
-from avion.parameters.create_profile_params import CreateProfileParams
+from avion.service.profile.model.create_profile_params import CreateProfileParams
 
 
 class CreateProfileSchema(Schema):

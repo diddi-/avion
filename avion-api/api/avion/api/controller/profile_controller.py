@@ -6,8 +6,8 @@ from flask_restx import Namespace, Resource, Api
 
 from avion.api.input.schema.create_profile_schema import CreateProfileSchema
 from avion.api.schema.profile_schema import ProfileSchema
-from avion.model.profile import Profile
-from avion.parameters.create_profile_params import CreateProfileParams
+from avion.service.profile.model.profile import Profile
+from avion.service.profile.model.create_profile_params import CreateProfileParams
 from avion.service.profile.profile_service import ProfileService
 from avion.service.session.http_session import HttpSession
 

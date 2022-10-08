@@ -4,8 +4,8 @@ import sqlite3
 from sqlite3 import Row
 from typing import List
 
-from avion.model.user_account import UserAccount
-from avion.parameters.create_user_account_params import CreateUserAccountParams
+from avion.service.account.model.user_account import UserAccount
+from avion.service.account.model.create_user_account_params import CreateUserAccountParams
 
 
 class UserAccountRepository:

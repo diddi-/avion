@@ -1,7 +1,7 @@
 from avion.config.config import current_config
-from avion.model.profile import Profile
-from avion.parameters.create_profile_params import CreateProfileParams
-from avion.repository.profile_repository import ProfileRepository
+from avion.service.profile.model.profile import Profile
+from avion.service.profile.model.create_profile_params import CreateProfileParams
+from avion.service.profile.repository.profile_repository import ProfileRepository
 
 
 class ProfileService:

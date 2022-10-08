@@ -3,8 +3,8 @@ import datetime
 import sqlite3
 from sqlite3 import Row
 
-from avion.model.profile import Profile
-from avion.parameters.create_profile_params import CreateProfileParams
+from avion.service.profile.model.profile import Profile
+from avion.service.profile.model.create_profile_params import CreateProfileParams
 
 
 class ProfileRepository:

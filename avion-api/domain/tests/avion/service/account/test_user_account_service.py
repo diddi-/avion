@@ -2,8 +2,8 @@ from unittest import TestCase
 
 from mockito import when, mock
 
-from avion.model.user_account import UserAccount
-from avion.parameters.create_user_account_params import CreateUserAccountParams
+from avion.service.account.model.user_account import UserAccount
+from avion.service.account.model.create_user_account_params import CreateUserAccountParams
 from avion.service.account.user_account_service import UserAccountService
 
 

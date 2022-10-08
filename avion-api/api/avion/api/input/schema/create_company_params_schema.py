@@ -1,7 +1,7 @@
 from flask_restx import Namespace, OrderedModel, fields as restx_fields
 from marshmallow import post_load, Schema, fields
 
-from avion.parameters.create_company_params import CreateCompanyParams
+from avion.service.company.model.create_company_params import CreateCompanyParams
 
 
 class CreateCompanyParamsSchema(Schema):

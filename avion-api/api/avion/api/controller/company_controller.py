@@ -6,9 +6,9 @@ from flask_restx import Namespace, Resource, Api
 
 from avion.api.schema.company_schema import CompanySchema
 from avion.api.input.schema.create_company_params_schema import CreateCompanyParamsSchema
-from avion.model.company import Company
-from avion.parameters.create_company_params import CreateCompanyParams
-from avion.repository.company_repository import CompanyRepository
+from avion.service.company.model.company import Company
+from avion.service.company.model.create_company_params import CreateCompanyParams
+from avion.service.company.repository.company_repository import CompanyRepository
 from avion.service.company.company_service import CompanyService
 from avion.service.session.http_session import HttpSession
 

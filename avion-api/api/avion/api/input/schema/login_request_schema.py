@@ -1,7 +1,7 @@
 from flask_restx import Namespace, OrderedModel, fields as restx_fields
 from marshmallow import post_load, Schema, fields
 
-from avion.service.account.login_request import LoginRequest
+from avion.service.account.model.login_request import LoginRequest
 
 
 class LoginRequestSchema(Schema):

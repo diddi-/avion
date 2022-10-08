@@ -14,7 +14,7 @@ class DbInitializer:
         with contextlib.closing(sqlite3.connect(self.db_path)) as conn:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
-            for file in os.scandir(os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "flyway", "sql")):
+            for file in os.scandir(os.path.join(os.path.dirname(__file__), "avion", "..", "..", "..", "flyway", "sql")):
                 if file.is_file():
                     cur.executescript(Path(file.path).read_text())
             conn.commit()

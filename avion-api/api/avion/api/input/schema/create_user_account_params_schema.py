@@ -1,7 +1,7 @@
 from flask_restx import Namespace, OrderedModel, fields as restx_fields
 from marshmallow import post_load, Schema, fields
 
-from avion.parameters.create_user_account_params import CreateUserAccountParams
+from avion.service.account.model.create_user_account_params import CreateUserAccountParams
 
 
 class CreateUserAccountParamsSchema(Schema):

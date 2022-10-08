@@ -1,8 +1,8 @@
 from flask_restx import Namespace, Resource, Api
 
 from avion.api.schema.company_schema import CompanySchema
-from avion.model.company import Company
-from avion.repository.company_repository import CompanyRepository
+from avion.service.company.model.company import Company
+from avion.service.company.repository.company_repository import CompanyRepository
 
 namespace = Namespace("company")
 

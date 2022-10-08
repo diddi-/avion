@@ -4,9 +4,9 @@ import sqlite3
 from sqlite3 import Row
 from typing import List
 
-from avion.parameters.create_company_params import CreateCompanyParams
-from avion.model.company import Company
-from avion.repository.exceptions.airline_not_found_exception import AirlineNotFoundException
+from avion.service.company.model.create_company_params import CreateCompanyParams
+from avion.service.company.model.company import Company
+from avion.service.company.exceptions.company_not_found_exception import CompanyNotFoundException
 
 
 class CompanyRepository:
@@ -46,7 +46,7 @@ class CompanyRepository:
             rows = cur.fetchall()
             if rows:
                 return self._row_to_company(rows[0])
-        raise AirlineNotFoundException(f"No company with name '{name}' found.")
+        raise CompanyNotFoundException(f"No company with name '{name}' found.")
 
     @staticmethod
     def _row_to_company(row: Row) -> Company:

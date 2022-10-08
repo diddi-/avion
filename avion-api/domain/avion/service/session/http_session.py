@@ -1,7 +1,7 @@
 from flask_jwt_extended import get_jwt_identity
 
-from avion.model.user_account import UserAccount
-from avion.repository.user_account_repository import UserAccountRepository
+from avion.service.account.model.user_account import UserAccount
+from avion.service.account.repository.user_account_repository import UserAccountRepository
 
 
 # Rename to HttpContext?

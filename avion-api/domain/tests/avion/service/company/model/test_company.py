@@ -1,7 +1,7 @@
 import datetime
 from unittest import TestCase
 
-from avion.model.company import Company
+from avion.service.company.model.company import Company
 
 
 class TestCompany(TestCase):

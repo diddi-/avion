@@ -5,8 +5,8 @@ from flask_restx import Namespace, Resource, Api
 
 from avion.api.input.schema.create_user_account_params_schema import CreateUserAccountParamsSchema
 from avion.api.schema.user_account_schema import UserAccountSchema
-from avion.model.user_account import UserAccount
-from avion.parameters.create_user_account_params import CreateUserAccountParams
+from avion.service.account.model.user_account import UserAccount
+from avion.service.account.model.create_user_account_params import CreateUserAccountParams
 from avion.service.account.user_account_service import UserAccountService
 
 namespace = Namespace("user_account")

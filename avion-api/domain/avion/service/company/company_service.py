@@ -1,7 +1,7 @@
 from avion.config.config import current_config
-from avion.model.company import Company
-from avion.parameters.create_company_params import CreateCompanyParams
-from avion.repository.company_repository import CompanyRepository
+from avion.service.company.model.company import Company
+from avion.service.company.model.create_company_params import CreateCompanyParams
+from avion.service.company.repository.company_repository import CompanyRepository
 from avion.service.profile.profile_service import ProfileService
 
 

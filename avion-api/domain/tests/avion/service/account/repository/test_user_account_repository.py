@@ -1,8 +1,8 @@
 from unittest import TestCase
 
-from avion.parameters.create_user_account_params import CreateUserAccountParams
-from avion.repository.user_account_repository import UserAccountRepository
-from tests.avion.repository.db_initializer import DbInitializer
+from avion.service.account.model.create_user_account_params import CreateUserAccountParams
+from avion.service.account.repository.user_account_repository import UserAccountRepository
+from tests.db_initializer import DbInitializer
 
 
 class TestUserAccountRepository(TestCase):

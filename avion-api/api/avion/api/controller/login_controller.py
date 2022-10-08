@@ -5,8 +5,8 @@ from flask_restx import Namespace, Resource, Api
 
 from avion.api.input.schema.login_request_schema import LoginRequestSchema
 from avion.api.schema.login_response_schema import LoginResponseSchema
-from avion.service.account.login_request import LoginRequest
-from avion.service.account.login_response import LoginResponse
+from avion.service.account.model.login_request import LoginRequest
+from avion.service.account.model.login_response import LoginResponse
 from avion.service.account.user_account_service import UserAccountService
 
 namespace = Namespace("login")
