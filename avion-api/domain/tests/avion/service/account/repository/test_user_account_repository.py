@@ -59,10 +59,11 @@ class TestUserAccountRepository(TestCase):
         params = CreateUserAccountParams("John", "Doe", "john@example.com", "secret")
         repository = UserAccountRepository(database=self.initializer.db_path)
         expected_user = repository.create(params, HashedPassword(params.password))
-        actual_user = repository.get_user_by_id(expected_user.id)
+        user_id = expected_user.id if expected_user.id else 0  # For mypy because UserAccount.id is Optional
+        actual_user = repository.get_user_by_id(user_id)
         self.assertEqual(expected_user, actual_user)
 
-    def test_password_can_be_validated(self):
+    def test_password_can_be_validated(self) -> None:
         params = CreateUserAccountParams("John", "Doe", "john@example.com", "secret")
         repository = UserAccountRepository(database=self.initializer.db_path)
         correct_password = HashedPassword(params.password)

@@ -27,11 +27,14 @@ class CompanyController(Resource):  # type: ignore
     @namespace.response(200, "Created",
                         CompanySchema.as_namespace_model(namespace))  # type: ignore
     @namespace.marshal_with(CompanySchema.as_namespace_model(namespace))  # type: ignore
-    @jwt_required()
+    @jwt_required()  # type: ignore
     def post(self) -> Company:
         data = request.json
         params = cast(CreateCompanyParams, CreateCompanyParamsSchema().load(data))  # type: ignore
-        return self.company_service.create_company(self.http_session.get_current_user().id, params)
+        user = self.http_session.get_current_user()
+        if user.id is None:
+            raise ValueError("User does not exist")
+        return self.company_service.create_company(user.id, params)
 
     @namespace.response(200, "OK", CompanySchema.as_namespace_model(namespace))  # type: ignore
     @namespace.marshal_with(CompanySchema.as_namespace_model(namespace))  # type: ignore

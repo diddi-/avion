@@ -16,13 +16,11 @@ class UserAccountService:
 
     def register(self, params: CreateUserAccountParams) -> UserAccount:
         password = HashedPassword(params.password)
-        params.password = None  # Don't want to accidentally pass the cleartext around
         return self._repository.create(params, password)
 
     def login(self, request: LoginRequest) -> LoginResponse:
         salt = self._repository.get_salt(request.username)
         password = HashedPassword(request.password, salt)
-        request.password = None  # Don't want to accidentally pass the cleartext around
         if not self._repository.validate_credentials(request.username, password):
             raise InvalidCredentialsException()
         return LoginResponse(create_access_token(identity=request.username))

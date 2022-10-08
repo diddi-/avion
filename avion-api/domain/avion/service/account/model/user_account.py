@@ -4,13 +4,13 @@ from typing import Optional, Any
 
 class UserAccount:
     """ A User Account represents a physical user and its personal details. """
-    def __init__(self, firstname: str, lastname: str):
+    def __init__(self, firstname: str, lastname: str, email: str, username: str):
         self._id: Optional[int] = None
-        self._created_at: Optional[datetime.datetime] = None
+        self._created_at: datetime.datetime = datetime.datetime.now(datetime.timezone.utc)
         self._firstname = firstname
         self._lastname = lastname
-        self._email: Optional[str] = None
-        self._username = self._email
+        self._email = email
+        self._username = username
 
     @property
     def firstname(self) -> str:
@@ -37,7 +37,7 @@ class UserAccount:
         self._id = value
 
     @property
-    def created_at(self) -> Optional[datetime.datetime]:
+    def created_at(self) -> datetime.datetime:
         return self._created_at
 
     @created_at.setter
@@ -45,7 +45,7 @@ class UserAccount:
         self._created_at = value
 
     @property
-    def email(self) -> Optional[str]:
+    def email(self) -> str:
         return self._email
 
     @email.setter
@@ -53,7 +53,7 @@ class UserAccount:
         self._email = value
 
     @property
-    def username(self) -> Optional[str]:
+    def username(self) -> str:
         return self._username
 
     @username.setter
@@ -61,4 +61,4 @@ class UserAccount:
         self._username = value
 
     def __eq__(self, other: Any) -> bool:
-        return type(other) == UserAccount and other.username == self.username
+        return isinstance(other, UserAccount) and other.username == self.username

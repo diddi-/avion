@@ -26,7 +26,7 @@ class ProfileController(Resource):  # type: ignore
     @namespace.response(200, "Created",
                         ProfileSchema.as_namespace_model(namespace))  # type: ignore
     @namespace.marshal_with(ProfileSchema.as_namespace_model(namespace))  # type: ignore
-    @jwt_required()
+    @jwt_required()  # type: ignore
     def post(self) -> Profile:
         data = cast(Dict[str, Any], request.json)
         params = cast(CreateProfileParams, CreateProfileSchema().load(data))

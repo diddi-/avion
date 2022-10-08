@@ -20,13 +20,12 @@ class TestUserAccountService(TestCase):
 
     def test_user_account_is_returned_after_registration(self) -> None:
         params = CreateUserAccountParams("John", "Doe", "john@example.com", "secret")
-        expected_account = UserAccount(params.firstname, params.lastname)
-        expected_account.email = params.email
+        expected_account = UserAccount(params.firstname, params.lastname, params.email, params.email)
         when(self.stubbed_repo).create(params, ANY(HashedPassword)).thenReturn(expected_account)
         actual_account = self.tested_service.register(params)
         self.assertEqual(expected_account, actual_account)
 
-    def test_exception_is_raised_when_login_fails(self):
+    def test_exception_is_raised_when_login_fails(self) -> None:
         request = LoginRequest("john@example.com", "secret")
         password = HashedPassword(request.password)
         when(self.stubbed_repo).get_salt(request.username).thenReturn(password.salt)
@@ -36,7 +35,7 @@ class TestUserAccountService(TestCase):
             self.tested_service.login(request)
 
     @unittest.skip("Access token generation needs an active Flask context. Requires refactor.")
-    def test_login_response_with_access_token_is_returned_on_successful_login(self):
+    def test_login_response_with_access_token_is_returned_on_successful_login(self) -> None:
         request = LoginRequest("john@example.com", "secret")
         password = HashedPassword(request.password)
         when(self.stubbed_repo).get_salt(request.username).thenReturn(password.salt)

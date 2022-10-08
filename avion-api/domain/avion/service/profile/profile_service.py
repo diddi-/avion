@@ -16,7 +16,7 @@ class ProfileService:
     def account_has_profile(self, account_id: int, profile_id: int) -> bool:
         return self._repository.account_has_profile(account_id, profile_id)
 
-    def withdraw(self, profile_id: int, amount: int):
+    def withdraw(self, profile_id: int, amount: int) -> None:
         profile = self._repository.get_profile_by_id(profile_id)
         if profile.balance < amount:
             raise ValueError("Insufficient funds")

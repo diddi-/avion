@@ -33,7 +33,7 @@ class ProfileRepository:
             cur.execute("SELECT COUNT(*) FROM profile WHERE user_account_id=? AND id=?",
                         (account_id, profile_id))
             conn.commit()
-            count = cur.fetchone()[0]
+            count = int(cur.fetchone()[0])  # Make mypy happy..
             return count == 1
 
     def get_profile_by_id(self, profile_id: int) -> Profile:
@@ -44,7 +44,7 @@ class ProfileRepository:
             conn.commit()
             return self._row_to_profile(cur.fetchone())
 
-    def save(self, profile: Profile):
+    def save(self, profile: Profile) -> None:
         with contextlib.closing(sqlite3.connect(self._db)) as conn:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
