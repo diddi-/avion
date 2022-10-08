@@ -1,5 +1,6 @@
 from flask_jwt_extended import create_access_token
 
+from avion.service.account.exceptions.invalid_credentials_exception import InvalidCredentialsException
 from avion.service.account.model.create_user_account_params import CreateUserAccountParams
 from avion.service.account.model.hashed_password import HashedPassword
 from avion.service.account.model.jwt_access_token import JwtAccessToken
@@ -23,7 +24,7 @@ class UserAccountService:
         password = HashedPassword(request.password, salt)
         request.password = None  # Don't want to accidentally pass the cleartext around
         if not self._repository.validate_credentials(request.username, password):
-            raise ValueError("Invalid credentials")
+            raise InvalidCredentialsException()
         return LoginResponse(create_access_token(identity=request.username))
 
     def parse_token(self, string_token: str) -> JwtAccessToken:
