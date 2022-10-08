@@ -26,4 +26,17 @@ create table profile (
     lastname varchar(100) not null,
     balance int not null default 0,
     foreign key(user_account_id) references user_account(id)
-)
+);
+
+create table airport (
+    id integer primary key,
+    name varchar(200) not null,
+    type varchar(50) not null,
+    latitude_deg float,
+    longitude_deg float,
+    continent varchar(10),
+    iso_country varchar(10),
+    municipality varchar(200),
+    gps_code varchar(10),
+    iata_code varchar(10)
+);
