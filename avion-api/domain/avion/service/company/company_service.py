@@ -7,8 +7,8 @@ from avion.service.profile.profile_service import ProfileService
 
 class CompanyService:
     def __init__(self, company_repository: CompanyRepository = CompanyRepository(),
-                 profile_repository: ProfileService = ProfileService()):
-        self._profile_service = profile_repository
+                 profile_service: ProfileService = ProfileService()):
+        self._profile_service = profile_service
         self._company_repo = company_repository
         self._config = current_config
 
