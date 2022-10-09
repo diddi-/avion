@@ -4,9 +4,9 @@ import sqlite3
 from sqlite3 import Row
 from typing import List
 
-from avion.service.company.model.create_company_params import CreateCompanyParams
-from avion.service.company.model.company import Company
 from avion.service.company.exceptions.company_not_found_exception import CompanyNotFoundException
+from avion.service.company.model.company import Company
+from avion.service.company.model.create_company_params import CreateCompanyParams
 
 
 class CompanyRepository:
@@ -22,7 +22,7 @@ class CompanyRepository:
             cur = conn.cursor()
             cur.execute("INSERT INTO company (created_at, profile_id, name, balance) "
                         "VALUES (?,?,?,?)",
-                        (company.created_at, params.owner_id, params.name,params.balance))
+                        (company.created_at, params.owner_id, params.name, params.balance))
             conn.commit()
             company.id = cur.lastrowid
         return company

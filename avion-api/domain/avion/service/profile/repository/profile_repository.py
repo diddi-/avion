@@ -3,6 +3,7 @@ import datetime
 import sqlite3
 from sqlite3 import Row
 
+from avion.service.company.model.company_role import CompanyRole
 from avion.service.profile.model.profile import Profile
 from avion.service.profile.model.create_profile_params import CreateProfileParams
 
@@ -32,7 +33,6 @@ class ProfileRepository:
             cur = conn.cursor()
             cur.execute("SELECT COUNT(*) FROM profile WHERE user_account_id=? AND id=?",
                         (account_id, profile_id))
-            conn.commit()
             count = int(cur.fetchone()[0])  # Make mypy happy..
             return count == 1
 
@@ -41,8 +41,13 @@ class ProfileRepository:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
             cur.execute("SELECT * FROM profile WHERE id = ?", (profile_id,))
-            conn.commit()
-            return self._row_to_profile(cur.fetchone())
+            profile = self._row_to_profile(cur.fetchone())
+            cur.execute("SELECT company_id, role from company_profile_role where profile_id=?",
+                        (profile.id,))
+            rows = cur.fetchall()
+            for row in rows:
+                profile.add_company_role(row[0], CompanyRole(row[1]))
+            return profile
 
     def save(self, profile: Profile) -> None:
         with contextlib.closing(sqlite3.connect(self._db)) as conn:

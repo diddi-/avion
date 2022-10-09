@@ -28,6 +28,16 @@ create table profile (
     foreign key(user_account_id) references user_account(id)
 );
 
+create table company_profile_role (
+    id integer primary key,
+    company_id integer,
+    profile_id integer,
+    role text,
+
+    foreign key(company_id) references company(id),
+    foreign key(profile_id) references profile(id)
+);
+
 create table airport (
     id integer primary key,
     name varchar(200) not null,
@@ -58,6 +68,7 @@ create table aircraft_model (
     price integer not null default 0
 );
 
+/* One instance of aircraft_model */
 create table company_aircraft (
     id integer primary key,
     company_id integer not null,

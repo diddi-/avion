@@ -1,5 +1,7 @@
 import datetime
-from typing import Optional
+from typing import Optional, List, Dict
+
+from avion.service.company.model.company_role import CompanyRole
 
 
 class Profile:
@@ -12,6 +14,17 @@ class Profile:
         self._firstname = firstname
         self._lastname = lastname
         self._balance = 0
+        self._company_roles: Dict[int, List[CompanyRole]] = {}
+
+    def has_company_role(self, company_id: int, role: CompanyRole) -> bool:
+        if company_id in self._company_roles.keys() and role in self._company_roles[company_id]:
+            return True
+        return False
+
+    def add_company_role(self, company_id: int, role: CompanyRole) -> None:
+        if company_id not in self._company_roles.keys():
+            self._company_roles[company_id] = []
+        self._company_roles[company_id].append(role)
 
     @property
     def firstname(self) -> str:

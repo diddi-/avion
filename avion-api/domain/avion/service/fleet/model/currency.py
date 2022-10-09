@@ -9,3 +9,6 @@ class Currency:
     @property
     def amount(self) -> int:
         return self._amount
+
+    def __int__(self) -> int:
+        return self._amount

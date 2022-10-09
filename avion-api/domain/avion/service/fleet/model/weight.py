@@ -9,3 +9,6 @@ class Weight:
     @property
     def kilograms(self) -> int:
         return self._kilograms
+
+    def __int__(self) -> int:
+        return self.kilograms

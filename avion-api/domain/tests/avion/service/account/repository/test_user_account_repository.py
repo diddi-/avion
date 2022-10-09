@@ -27,9 +27,9 @@ class TestUserAccountRepository(TestCase):
         repository.create(trevor, HashedPassword("secret"))
 
         users = repository.get_all_user_accounts()
-        self.assertEqual(3, len(users))  # Seeded admin user too!
-        self.assertEqual(users[1].firstname, john.firstname)
-        self.assertEqual(users[2].firstname, trevor.firstname)
+        self.assertEqual(2, len(users))
+        self.assertEqual(users[0].firstname, john.firstname)
+        self.assertEqual(users[1].firstname, trevor.firstname)
 
     def test_username_must_be_unique(self) -> None:
         params = CreateUserAccountParams("John", "Doe", "john@example.com", "secret")

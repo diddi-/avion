@@ -1,7 +1,6 @@
 from unittest import TestCase
 
 from mockito import mock, when
-from mockito.matchers import Any
 
 from avion.service.company.company_service import CompanyService
 from avion.service.company.model.company import Company

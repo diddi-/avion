@@ -7,3 +7,6 @@ class EngineType(Enum):
     TURBO_PROP = "turboprop"
     ELECTRIC = "electric"
     GLIDER = "glider"
+
+    def __str__(self) -> str:
+        return self.value

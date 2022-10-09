@@ -1,60 +1,43 @@
 import contextlib
 import datetime
 import sqlite3
-from sqlite3 import Row
 
-from avion.service.profile.model.create_profile_params import CreateProfileParams
-from avion.service.profile.model.profile import Profile
+from avion.service.fleet.model.aircraft_model import AircraftModel
+from avion.service.fleet.model.create_aircraft_model_params import CreateAircraftModelParams
 
 
 class FleetRepository:
     def __init__(self, database: str = "/db/airline-api.db"):
         self._db = database
 
-    def create(self, params: CreateProfileParams) -> Profile:
-        profile = Profile(params.firstname, params.lastname)
-        profile.created_at = datetime.datetime.now(datetime.timezone.utc)
-        profile.owner_id = params.owner_id
-        profile.balance = params.balance
+    def create_aircraft_model(self, params: CreateAircraftModelParams) -> AircraftModel:
+        model = AircraftModel(params.manufacturer, params.model, params.icao_code)
+        model.engine_count = params.engine_count
+        model.engine_type = params.engine_type
+        model.max_fuel = params.max_fuel
+        model.empty_weight = params.empty_weight
+        model.max_takeoff_weight = params.max_takeoff_weight
+        model.max_passengers = params.max_passengers
+        model.price = params.price
+
         with contextlib.closing(sqlite3.connect(self._db)) as conn:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
-            cur.execute("INSERT INTO profile (created_at, user_account_id, firstname, lastname, balance) "
-                        "VALUES (?,?,?,?,?)",
-                        (profile.created_at, profile.owner_id, profile.firstname, profile.lastname, profile.balance))
+            cur.execute(
+                "INSERT INTO aircraft_model (manufacturer, model, icao_code, engine_count, engine_type, max_fuel,"
+                " empty_weight, max_takeoff_weight, max_passengers, price) VALUES(?,?,?,?,?,?,?,?,?,?)",
+                (model.manufacturer, model.model, model.icao_code, model.engine_count, str(model.engine_type),
+                 int(model.max_fuel), int(model.empty_weight), int(model.max_takeoff_weight), model.max_passengers,
+                 int(model.price)))
             conn.commit()
-            profile.id = cur.lastrowid
-        return profile
+            model.id = cur.lastrowid
+        return model
 
-    def account_has_profile(self, account_id: int, profile_id: int) -> bool:
+    def add_to_fleet(self, company_id: int, aircraft_model_id: int) -> None:
         with contextlib.closing(sqlite3.connect(self._db)) as conn:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
-            cur.execute("SELECT COUNT(*) FROM profile WHERE user_account_id=? AND id=?",
-                        (account_id, profile_id))
+            cur.execute("INSERT INTO company_aircraft (company_id, aircraft_model_id, purchased_at)"
+                        " VALUES(?,?,?)",
+                        (company_id, aircraft_model_id, datetime.datetime.now(datetime.timezone.utc)))
             conn.commit()
-            count = int(cur.fetchone()[0])  # Make mypy happy..
-            return count == 1
-
-    def get_profile_by_id(self, profile_id: int) -> Profile:
-        with contextlib.closing(sqlite3.connect(self._db)) as conn:
-            conn.row_factory = sqlite3.Row
-            cur = conn.cursor()
-            cur.execute("SELECT * FROM profile WHERE id = ?", (profile_id,))
-            conn.commit()
-            return self._row_to_profile(cur.fetchone())
-
-    def save(self, profile: Profile) -> None:
-        with contextlib.closing(sqlite3.connect(self._db)) as conn:
-            conn.row_factory = sqlite3.Row
-            cur = conn.cursor()
-            cur.execute("UPDATE profile SET balance = ? WHERE id = ?", (profile.balance, profile.id))
-            conn.commit()
-
-    @staticmethod
-    def _row_to_profile(row: Row) -> Profile:
-        profile = Profile(row["firstname"], row["lastname"])
-        profile.created_at = datetime.datetime.fromisoformat(row["created_at"])
-        profile.id = row["id"]
-        profile.balance = row["balance"]
-        return profile
