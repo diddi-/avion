@@ -17,7 +17,8 @@ setuptools.setup(
     ],
     extras_require={
         "test": [
-            "mockito"
+            "mockito",
+            "parameterized"
         ]  # Dependencies for testing go here
     },
     classifiers=[

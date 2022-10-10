@@ -1,10 +1,14 @@
+from typing import Dict
+
 from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restx import Namespace, Resource, Api
 
+from avion.api.decorator.with_profile import with_profile
 from avion.api.schema.jwt_access_token_schema import JwtAccessTokenSchema
 from avion.service.account.model.jwt_access_token import JwtAccessToken
 from avion.service.account.user_account_service import UserAccountService
+from avion.service.profile.model.profile import Profile
 
 namespace = Namespace("jwt-test")
 
@@ -28,3 +32,8 @@ class JwtTestController(Resource):  # type: ignore
         if authz is None:
             raise ValueError("Missing Authorization header")
         return self.user_account_service.parse_token(authz.split(" ")[1])
+
+    @jwt_required()
+    @with_profile()
+    def get(self, profile: Profile) -> Dict:
+        return {"Profile": profile.firstname}

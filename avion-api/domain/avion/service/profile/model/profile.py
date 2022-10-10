@@ -16,9 +16,13 @@ class Profile:
         self._balance = 0
         self._company_roles: Dict[int, List[CompanyRole]] = {}
 
-    def has_company_role(self, company_id: int, role: CompanyRole) -> bool:
-        if company_id in self._company_roles.keys() and role in self._company_roles[company_id]:
-            return True
+    def has_company_role(self, company_id: int, roles: List[CompanyRole]) -> bool:
+        """ Returns True if the Profile has at least one of the supplied roles. """
+        if company_id not in self._company_roles.keys():
+            return False
+        for role in roles:
+            if role in self._company_roles[company_id]:
+                return True
         return False
 
     def add_company_role(self, company_id: int, role: CompanyRole) -> None:
