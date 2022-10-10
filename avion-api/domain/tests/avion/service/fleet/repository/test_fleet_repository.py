@@ -14,13 +14,15 @@ class TestFleetRepository(TestCase):
         self.tested_repository = FleetRepository(database=self.initializer.db_path)
         self.company_repository = CompanyRepository(database=self.initializer.db_path)
 
-    def test_aircraft_model_can_be_created(self):
+    def test_aircraft_model_can_be_created(self) -> None:
         params = CreateAircraftModelParams("Cessna", "172 Skyhawk", "C172")
         model = self.tested_repository.create_aircraft_model(params)
         self.assertIsNotNone(model.id)
 
-    def test_aircraft_can_be_added_to_fleet(self):
+    def test_aircraft_can_be_added_to_fleet(self) -> None:
         params = CreateAircraftModelParams("Cessna", "172 Skyhawk", "C172")
         model = self.tested_repository.create_aircraft_model(params)
         company = self.company_repository.create(CreateCompanyParams("SAS", 1))
+        assert company.id is not None  # Mypy..
+        assert model.id is not None  # Mypy..
         self.tested_repository.add_to_fleet(company.id, model.id)

@@ -10,5 +10,5 @@ class Volume:
     def liter(self) -> int:
         return self._liter
 
-    def __int__(self):
+    def __int__(self) -> int:
         return self.liter

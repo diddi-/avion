@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Any
 
 from flask import request
 from flask_jwt_extended import jwt_required
@@ -33,7 +33,7 @@ class JwtTestController(Resource):  # type: ignore
             raise ValueError("Missing Authorization header")
         return self.user_account_service.parse_token(authz.split(" ")[1])
 
-    @jwt_required()
+    @jwt_required()  # type: ignore
     @with_profile()
-    def get(self, profile: Profile) -> Dict:
+    def get(self, profile: Profile) -> Dict[str, Any]:
         return {"Profile": profile.firstname}

@@ -18,13 +18,13 @@ class CompanyRepository:
         company = Company(params.name)
         company.created_at = datetime.datetime.now(datetime.timezone.utc)
         company.owner_id = params.owner_id
-        company.balance = params.balance
+        company.balance = Currency(params.balance)
         with contextlib.closing(sqlite3.connect(self._db)) as conn:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
             cur.execute("INSERT INTO company (created_at, profile_id, name, balance) "
                         "VALUES (?,?,?,?)",
-                        (company.created_at, company.owner_id, company.name, company.balance))
+                        (company.created_at, company.owner_id, company.name, company.balance.amount))
             conn.commit()
             company.id = cur.lastrowid
         return company

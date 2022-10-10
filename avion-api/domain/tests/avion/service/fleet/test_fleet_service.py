@@ -15,7 +15,7 @@ class TestFleetService(TestCase):
         self.tested_service = FleetService(repository=self.stubbed_fleet_repo,
                                            profile_service=self.stubbed_profile_service)
 
-    @parameterized.expand([(CompanyRole.CEO,), (CompanyRole.FLEET_MGMT,)])
+    @parameterized.expand([(CompanyRole.CEO,), (CompanyRole.FLEET_MGMT,)])  # type: ignore
     def test_CEO_and_FLEET_MGMT_roles_can_buy_new_aircraft(self, role: CompanyRole) -> None:
         profile = Profile("John", "Doe")
         company_id = 1
@@ -25,7 +25,7 @@ class TestFleetService(TestCase):
 
         verify(self.stubbed_fleet_repo).add_to_fleet(company_id, aircraft_model_id)
 
-    def test_exception_is_raised_when_unauthorized_role_attempts_to_buy_aircraft(self):
+    def test_exception_is_raised_when_unauthorized_role_attempts_to_buy_aircraft(self) -> None:
         profile = Profile("John", "Doe")
         company_id = 1
         aircraft_model_id = 1

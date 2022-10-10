@@ -25,7 +25,7 @@ class TestCompanyService(TestCase):
         actual_company = self.tested_service.create_company(account_id, params)
         self.assertEqual(expected_company.name, actual_company.name)
 
-    def test_withdraw_currency_from_company(self):
+    def test_withdraw_currency_from_company(self) -> None:
         company = Company("SAS")
         company.id = 1
         company.balance = Currency(100)
@@ -33,7 +33,7 @@ class TestCompanyService(TestCase):
         self.tested_service.withdraw(company.id, Currency(50))
         self.assertEqual(Currency(50), company.balance)
 
-    def test_withdraw_raises_exception_when_balance_is_too_low(self):
+    def test_withdraw_raises_exception_when_balance_is_too_low(self) -> None:
         company = Company("SAS")
         company.id = 1
         company.balance = Currency(50)
