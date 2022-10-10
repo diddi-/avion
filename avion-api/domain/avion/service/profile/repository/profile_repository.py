@@ -54,6 +54,12 @@ class ProfileRepository:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
             cur.execute("UPDATE profile SET balance = ? WHERE id = ?", (profile.balance, profile.id))
+
+            # This is UGLY. But we're here to make things work first.
+            cur.execute("DELETE FROM company_profile_role WHERE profile_id=?", (profile.id,))
+            for role in profile.roles:
+                cur.execute("INSERT INTO company_profile_role (company_id, profile_id, role)"
+                            " VALUES(?,?,?)", (role[0], profile.id, str(role[1])))
             conn.commit()
 
     @staticmethod

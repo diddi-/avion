@@ -1,5 +1,6 @@
 from avion.config.config import current_config
 from avion.service.company.model.company import Company
+from avion.service.company.model.company_role import CompanyRole
 from avion.service.company.model.create_company_params import CreateCompanyParams
 from avion.service.company.repository.company_repository import CompanyRepository
 from avion.model.currency import Currency
@@ -22,7 +23,9 @@ class CompanyService:
             params.balance = self._config.game.company_startup_cost
 
         # Need to refund profile balance if this fails.
-        return self._company_repo.create(params)
+        company = self._company_repo.create(params)
+        self._profile_service.add_company_role(params.owner_id, company.id, CompanyRole.CEO)
+        return company
 
     def withdraw(self, company_id: int, amount: Currency) -> None:
         company = self._company_repo.get_company_by_id(company_id)

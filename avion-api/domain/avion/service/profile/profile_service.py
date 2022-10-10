@@ -1,4 +1,5 @@
 from avion.config.config import current_config
+from avion.service.company.model.company_role import CompanyRole
 from avion.service.profile.model.profile import Profile
 from avion.service.profile.model.create_profile_params import CreateProfileParams
 from avion.service.profile.repository.profile_repository import ProfileRepository
@@ -18,6 +19,11 @@ class ProfileService:
 
     def get_profile(self, profile_id: int) -> Profile:
         return self._repository.get_profile_by_id(profile_id)
+
+    def add_company_role(self, profile_id: int, company_id: int, role: CompanyRole) -> None:
+        profile = self._repository.get_profile_by_id(profile_id)
+        profile.add_company_role(company_id, role)
+        self._repository.save(profile)
 
     def withdraw(self, profile_id: int, amount: int) -> None:
         profile = self._repository.get_profile_by_id(profile_id)

@@ -1,5 +1,5 @@
 import datetime
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Tuple
 
 from avion.service.company.model.company_role import CompanyRole
 
@@ -29,6 +29,14 @@ class Profile:
         if company_id not in self._company_roles.keys():
             self._company_roles[company_id] = []
         self._company_roles[company_id].append(role)
+
+    @property
+    def roles(self) -> List[Tuple[int, CompanyRole]]:
+        roles = []
+        for company_id, company_roles in self._company_roles.items():
+            for role in company_roles:
+                roles.append((company_id, role))
+        return roles
 
     @property
     def firstname(self) -> str:

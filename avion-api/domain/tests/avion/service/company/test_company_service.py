@@ -1,10 +1,11 @@
 from unittest import TestCase
 
-from mockito import mock, when
+from mockito import mock, when, verify
 
 from avion.model.currency import Currency
 from avion.service.company.company_service import CompanyService
 from avion.service.company.model.company import Company
+from avion.service.company.model.company_role import CompanyRole
 from avion.service.company.model.create_company_params import CreateCompanyParams
 
 
@@ -41,3 +42,14 @@ class TestCompanyService(TestCase):
         with self.assertRaises(ValueError) as err:
             self.tested_service.withdraw(company.id, Currency(100))
         self.assertIn("Insufficient funds", str(err.exception))
+
+    def test_CEO_role_is_automatically_added_to_owner_of_a_new_company(self) -> None:
+        account_id = 1
+        params = CreateCompanyParams("SAS", 123, 10000)
+        company = Company(params.name)
+        company.id = 1
+        when(self.stubbed_profile_service).account_has_profile(account_id, params.owner_id).thenReturn(True)
+        when(self.stubbed_repo).create(params).thenReturn(company)
+
+        self.tested_service.create_company(account_id, params)
+        verify(self.stubbed_profile_service).add_company_role(params.owner_id, company.id, CompanyRole.CEO)
