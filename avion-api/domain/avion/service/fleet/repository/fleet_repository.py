@@ -42,8 +42,7 @@ class FleetRepository:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
             cur.execute("SELECT * from aircraft_model where id=?", (model_id,))
-
-        return self._row_to_aircraft_model(cur.fetchone()[0])
+            return self._row_to_aircraft_model(cur.fetchone())
 
     def add_to_fleet(self, company_id: int, aircraft_model_id: int) -> None:
         with contextlib.closing(sqlite3.connect(self._db)) as conn:

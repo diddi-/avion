@@ -57,7 +57,7 @@ class CompanyRepository:
             cur.execute("SELECT * FROM company WHERE id=?", (c_id,))
             rows = cur.fetchall()
             if rows:
-                return self._row_to_company(cur.fetchone()[0])
+                return self._row_to_company(rows[0])
         raise CompanyNotFoundException(f"No company with id '{c_id}' found.")
 
     def save(self, company: Company) -> None:
