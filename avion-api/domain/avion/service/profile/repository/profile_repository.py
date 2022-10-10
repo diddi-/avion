@@ -33,7 +33,7 @@ class ProfileRepository:
             cur = conn.cursor()
             cur.execute("SELECT COUNT(*) FROM profile WHERE user_account_id=? AND id=?",
                         (account_id, profile_id))
-            count = int(cur.fetchone()[0])  # Make mypy happy..
+            count = int(cur.fetchone()[0])
             return count == 1
 
     def get_profile_by_id(self, profile_id: int) -> Profile:

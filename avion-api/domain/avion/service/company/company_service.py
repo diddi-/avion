@@ -2,6 +2,7 @@ from avion.config.config import current_config
 from avion.service.company.model.company import Company
 from avion.service.company.model.create_company_params import CreateCompanyParams
 from avion.service.company.repository.company_repository import CompanyRepository
+from avion.model.currency import Currency
 from avion.service.profile.profile_service import ProfileService
 
 
@@ -22,3 +23,10 @@ class CompanyService:
 
         # Need to refund profile balance if this fails.
         return self._company_repo.create(params)
+
+    def withdraw(self, company_id: int, amount: Currency) -> None:
+        company = self._company_repo.get_company_by_id(company_id)
+        if company.balance < amount:
+            raise ValueError("Insufficient funds")
+        company.balance -= amount
+        self._company_repo.save(company)

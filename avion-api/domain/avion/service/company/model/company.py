@@ -1,6 +1,8 @@
 import datetime
 from typing import Optional
 
+from avion.model.currency import Currency
+
 
 class Company:
     def __init__(self, name: str):
@@ -8,6 +10,7 @@ class Company:
         self._name = name
         self._created_at: Optional[datetime.datetime] = None
         self._owner_id: Optional[int] = None
+        self._balance = Currency(0)
 
     @property
     def name(self) -> str:
@@ -40,3 +43,11 @@ class Company:
     @owner_id.setter
     def owner_id(self, value: Optional[int]) -> None:
         self._owner_id = value
+
+    @property
+    def balance(self) -> Currency:
+        return self._balance
+
+    @balance.setter
+    def balance(self, value: Currency) -> None:
+        self._balance = value
