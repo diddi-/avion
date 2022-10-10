@@ -23,11 +23,13 @@ class TestFleetService(TestCase):
     def test_CEO_and_FLEET_MGMT_roles_can_buy_new_aircraft(self, role: CompanyRole) -> None:
         profile = Profile("John", "Doe")
         company_id = 1
-        aircraft_model_id = 1
+        model = AircraftModel("Cessna", "172", "C172")
+        model.id = 1
         profile.add_company_role(company_id, role)
-        self.tested_service.buy_aircraft(profile, company_id, aircraft_model_id)
+        when(self.stubbed_fleet_repo).get_aircraft_model_by_id(model.id).thenReturn(model)
+        self.tested_service.buy_aircraft(profile, company_id, model.id)
 
-        verify(self.stubbed_fleet_repo).add_to_fleet(company_id, aircraft_model_id)
+        verify(self.stubbed_fleet_repo).add_to_fleet(company_id, model.id)
 
     def test_exception_is_raised_when_unauthorized_role_attempts_to_buy_aircraft(self) -> None:
         profile = Profile("John", "Doe")

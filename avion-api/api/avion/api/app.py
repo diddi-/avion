@@ -1,6 +1,6 @@
 import json
 
-from flask import Flask
+from flask import Flask, Response
 from flask_jwt_extended import JWTManager
 from flask_restx import Api
 
@@ -39,7 +39,7 @@ def create_app() -> Flask:
     api.add_namespace(fleet_namespace, "/fleet")
 
     @app.errorhandler(Exception)
-    def handle_exception(e: Exception):
+    def handle_exception(e: Exception) -> Response:
         """Return JSON instead of HTML for HTTP errors."""
         body = json.dumps({
             "error": e.__class__.__name__,

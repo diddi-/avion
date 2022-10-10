@@ -5,8 +5,8 @@ from avion.model.currency import Currency
 
 
 class Company:
-    def __init__(self, name: str):
-        self._id: Optional[int] = None
+    def __init__(self, company_id: int, name: str):
+        self._id = company_id
         self._name = name
         self._created_at: Optional[datetime.datetime] = None
         self._owner_id: Optional[int] = None
@@ -17,14 +17,8 @@ class Company:
         return self._name
 
     @property
-    def id(self) -> Optional[int]:
+    def id(self) -> int:
         return self._id
-
-    @id.setter
-    def id(self, table_id: int) -> None:
-        if self._id is not None:
-            raise ValueError("Changing ID is not allowed")
-        self._id = table_id
 
     @property
     def created_at(self) -> Optional[datetime.datetime]:

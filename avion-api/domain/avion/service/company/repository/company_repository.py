@@ -15,18 +15,20 @@ class CompanyRepository:
         self._db = database
 
     def create(self, params: CreateCompanyParams) -> Company:
-        company = Company(params.name)
-        company.created_at = datetime.datetime.now(datetime.timezone.utc)
-        company.owner_id = params.owner_id
-        company.balance = Currency(params.balance)
+        created_at = datetime.datetime.now(datetime.timezone.utc)
         with contextlib.closing(sqlite3.connect(self._db)) as conn:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
             cur.execute("INSERT INTO company (created_at, profile_id, name, balance) "
                         "VALUES (?,?,?,?)",
-                        (company.created_at, company.owner_id, company.name, company.balance.amount))
+                        (created_at, params.owner_id, params.name, params.balance))
             conn.commit()
-            company.id = cur.lastrowid
+            company_id = cur.lastrowid
+            assert company_id is not None
+            company = Company(company_id, params.name)
+            company.owner_id = params.owner_id
+            company.balance = Currency(params.balance)
+            company.created_at = created_at
         return company
 
     def get_all_companies(self) -> List[Company]:
@@ -70,8 +72,7 @@ class CompanyRepository:
 
     @staticmethod
     def _row_to_company(row: Row) -> Company:
-        company = Company(row["name"])
+        company = Company(row["id"], row["name"])
         company.created_at = datetime.datetime.fromisoformat(row["created_at"])
-        company.id = row["id"]
         company.balance = Currency(int(row["balance"]))
         return company
