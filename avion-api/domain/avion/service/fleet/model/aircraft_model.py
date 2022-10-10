@@ -7,6 +7,8 @@ from avion.service.fleet.model.weight import Weight
 
 
 class AircraftModel:
+    # This should be fixed properly, disabling check for now.
+    # pylint: disable=too-many-instance-attributes
     def __init__(self, manufacturer: str, model: str, icao_code: str):
         self.id: Optional[int] = None
         self.manufacturer = manufacturer

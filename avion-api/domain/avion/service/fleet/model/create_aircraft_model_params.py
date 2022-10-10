@@ -8,6 +8,8 @@ from avion.service.fleet.model.weight import Weight
 
 @dataclass
 class CreateAircraftModelParams:
+    # This should be fixed properly, disabling check for now.
+    # pylint: disable=too-many-instance-attributes
     manufacturer: str
     model: str
     icao_code: str

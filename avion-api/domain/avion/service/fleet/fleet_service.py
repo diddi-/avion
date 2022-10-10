@@ -13,7 +13,7 @@ class FleetService:
 
     def buy_aircraft(self, profile: Profile, company_id: int, aircraft_model_id: int) -> None:
         if not profile.has_company_role(company_id, [CompanyRole.CEO, CompanyRole.FLEET_MGMT]):
-            raise ValueError(f"Unauthorized action")
+            raise ValueError("Unauthorized action")
 
         # TODO: It costs money!
         self._repository.add_to_fleet(company_id, aircraft_model_id)
