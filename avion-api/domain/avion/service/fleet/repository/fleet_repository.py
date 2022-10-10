@@ -2,8 +2,12 @@ import contextlib
 import datetime
 import sqlite3
 
+from avion.model.currency import Currency
 from avion.service.fleet.model.aircraft_model import AircraftModel
 from avion.service.fleet.model.create_aircraft_model_params import CreateAircraftModelParams
+from avion.service.fleet.model.engine_type import EngineType
+from avion.service.fleet.model.volume import Volume
+from avion.service.fleet.model.weight import Weight
 
 
 class FleetRepository:
@@ -33,6 +37,14 @@ class FleetRepository:
             model.id = cur.lastrowid
         return model
 
+    def get_aircraft_model_by_id(self, model_id: int) -> AircraftModel:
+        with contextlib.closing(sqlite3.connect(self._db)) as conn:
+            conn.row_factory = sqlite3.Row
+            cur = conn.cursor()
+            cur.execute("SELECT * from aircraft_model where id=?", (model_id,))
+
+        return self._row_to_aircraft_model(cur.fetchone()[0])
+
     def add_to_fleet(self, company_id: int, aircraft_model_id: int) -> None:
         with contextlib.closing(sqlite3.connect(self._db)) as conn:
             conn.row_factory = sqlite3.Row
@@ -41,3 +53,16 @@ class FleetRepository:
                         " VALUES(?,?,?)",
                         (company_id, aircraft_model_id, datetime.datetime.now(datetime.timezone.utc)))
             conn.commit()
+
+    @staticmethod
+    def _row_to_aircraft_model(row: sqlite3.Row) -> AircraftModel:
+        model = AircraftModel(row["manufacturer"], row["model"], row["icao_code"])
+        model.id = row["id"]
+        model.empty_weight = Weight(int(row["empty_weight"]))
+        model.engine_count = int(row["engine_count"])
+        model.engine_type = EngineType(row["engine_type"])
+        model.max_fuel = Volume(int(row["max_fuel"]))
+        model.max_passengers = int(row["max_passengers"])
+        model.max_takeoff_weight = Weight(int(row["max_takeoff_weight"]))
+        model.price = Currency(int(row["price"]))
+        return model
