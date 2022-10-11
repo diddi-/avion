@@ -5,7 +5,9 @@ from parameterized import parameterized
 
 from avion.model.currency import Currency
 from avion.service.company.model.company_role import CompanyRole
+from avion.service.fleet.exceptions.no_registration_found_exception import NoRegistrationFoundException
 from avion.service.fleet.fleet_service import FleetService
+from avion.service.fleet.model.aircraft import Aircraft
 from avion.service.fleet.model.aircraft_model import AircraftModel
 from avion.service.profile.model.profile import Profile
 
@@ -26,7 +28,12 @@ class TestFleetService(TestCase):
         model = AircraftModel("Cessna", "172", "C172")
         model.id = 1
         profile.add_company_role(company_id, role)
+        aircraft = Aircraft(1, model.id, company_id)
+
+        when(self.stubbed_fleet_repo).add_to_fleet(company_id, model.id).thenReturn(aircraft)
         when(self.stubbed_fleet_repo).get_aircraft_model_by_id(model.id).thenReturn(model)
+        when(self.stubbed_fleet_repo).get_latest_registration().thenRaise(NoRegistrationFoundException)
+        when(self.stubbed_fleet_repo).get_aircraft_by_id(aircraft.id).thenReturn(aircraft)
         self.tested_service.buy_aircraft(profile, company_id, model.id)
 
         verify(self.stubbed_fleet_repo).add_to_fleet(company_id, model.id)
@@ -47,7 +54,26 @@ class TestFleetService(TestCase):
         aircraft_model.id = 1
         aircraft_model.price = Currency(100)
         profile.add_company_role(company_id, CompanyRole.CEO)
+        aircraft = Aircraft(1, aircraft_model.id, company_id)
 
+        when(self.stubbed_fleet_repo).add_to_fleet(company_id, aircraft_model.id).thenReturn(aircraft)
         when(self.stubbed_fleet_repo).get_aircraft_model_by_id(aircraft_model.id).thenReturn(aircraft_model)
+        when(self.stubbed_fleet_repo).get_latest_registration().thenRaise(NoRegistrationFoundException)
+        when(self.stubbed_fleet_repo).get_aircraft_by_id(aircraft.id).thenReturn(aircraft)
         self.tested_service.buy_aircraft(profile, company_id, aircraft_model.id)
         verify(self.stubbed_company_service).withdraw(company_id, aircraft_model.price)
+
+    def test_aircraft_is_registered_when_buying_it(self) -> None:
+        profile = Profile("John", "Doe")
+        company_id = 1
+        model = AircraftModel("Cessna", "172", "C172")
+        model.id = 1
+        profile.add_company_role(company_id, CompanyRole.CEO)
+        aircraft = Aircraft(1, model.id, company_id)
+        when(self.stubbed_fleet_repo).add_to_fleet(company_id, model.id).thenReturn(aircraft)
+        when(self.stubbed_fleet_repo).get_aircraft_by_id(aircraft.id).thenReturn(aircraft)
+        when(self.stubbed_fleet_repo).get_aircraft_model_by_id(model.id).thenReturn(model)
+        when(self.stubbed_fleet_repo).get_latest_registration().thenRaise(NoRegistrationFoundException)
+        self.tested_service.buy_aircraft(profile, company_id, model.id)
+
+        self.assertIsNotNone(aircraft.registration)

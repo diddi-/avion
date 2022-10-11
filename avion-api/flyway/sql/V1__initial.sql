@@ -74,7 +74,10 @@ create table company_aircraft (
     company_id integer not null,
     aircraft_model_id integer not null,
     purchased_at text default current_timestamp,
+    registration_prefix text,
+    registration_identifier text,
 
     foreign key(company_id) references company(id),
-    foreign key(aircraft_model_id) references aircraft_model(id)
+    foreign key(aircraft_model_id) references aircraft_model(id),
+    unique(registration_prefix, registration_identifier)
 );

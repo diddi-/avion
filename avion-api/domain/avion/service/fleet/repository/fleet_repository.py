@@ -3,7 +3,10 @@ import datetime
 import sqlite3
 
 from avion.model.currency import Currency
+from avion.service.fleet.exceptions.no_registration_found_exception import NoRegistrationFoundException
+from avion.service.fleet.model.aircraft import Aircraft
 from avion.service.fleet.model.aircraft_model import AircraftModel
+from avion.service.fleet.model.aircraft_registration import AircraftRegistration
 from avion.service.fleet.model.create_aircraft_model_params import CreateAircraftModelParams
 from avion.service.fleet.model.engine_type import EngineType
 from avion.service.fleet.model.volume import Volume
@@ -44,14 +47,53 @@ class FleetRepository:
             cur.execute("SELECT * from aircraft_model where id=?", (model_id,))
             return self._row_to_aircraft_model(cur.fetchone())
 
-    def add_to_fleet(self, company_id: int, aircraft_model_id: int) -> None:
+    def add_to_fleet(self, company_id: int, aircraft_model_id: int) -> Aircraft:
+        purchased_at = datetime.datetime.now(datetime.timezone.utc)
         with contextlib.closing(sqlite3.connect(self._db)) as conn:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
             cur.execute("INSERT INTO company_aircraft (company_id, aircraft_model_id, purchased_at)"
                         " VALUES(?,?,?)",
-                        (company_id, aircraft_model_id, datetime.datetime.now(datetime.timezone.utc)))
+                        (company_id, aircraft_model_id, purchased_at))
             conn.commit()
+            aircraft_id = cur.lastrowid
+            assert aircraft_id is not None
+            aircraft = Aircraft(aircraft_id, aircraft_model_id, company_id)
+            aircraft.purchased_at = purchased_at
+            return aircraft
+
+    def get_aircraft_by_id(self, aircraft_id: int) -> Aircraft:
+        with contextlib.closing(sqlite3.connect(self._db)) as conn:
+            conn.row_factory = sqlite3.Row
+            cur = conn.cursor()
+            cur.execute("SELECT * from company_aircraft where id=?", (aircraft_id,))
+            return self._row_to_aircraft(cur.fetchone())
+
+    def save(self, aircraft: Aircraft) -> None:
+        reg_prefix = aircraft.registration.prefix if aircraft.registration else None
+        reg_identifier = aircraft.registration.identifier if aircraft.registration else None
+
+        with contextlib.closing(sqlite3.connect(self._db)) as conn:
+            conn.row_factory = sqlite3.Row
+            cur = conn.cursor()
+            cur.execute("UPDATE company_aircraft SET company_id=?, registration_prefix=?, registration_identifier=? "
+                        " WHERE id=?", (aircraft.company_id, reg_prefix,
+                                        reg_identifier, aircraft.id))
+            conn.commit()
+
+    def get_latest_registration(self) -> AircraftRegistration:
+        with contextlib.closing(sqlite3.connect(self._db)) as conn:
+            conn.row_factory = sqlite3.Row
+            cur = conn.cursor()
+
+            # We cheat a little by just looking at the latest registered aircraft right now. This will not hold in the
+            # future when we have different registration prefixes.
+            cur.execute("SELECT id, registration_prefix, registration_identifier FROM company_aircraft"
+                        " WHERE registration_prefix IS NOT NULL ORDER BY id LIMIT 1")
+            row = cur.fetchone()
+            if not row:
+                raise NoRegistrationFoundException()
+            return AircraftRegistration(row["registration_prefix"], row["registration_identifier"])
 
     @staticmethod
     def _row_to_aircraft_model(row: sqlite3.Row) -> AircraftModel:
@@ -65,3 +107,11 @@ class FleetRepository:
         model.max_takeoff_weight = Weight(int(row["max_takeoff_weight"]))
         model.price = Currency(int(row["price"]))
         return model
+
+    @staticmethod
+    def _row_to_aircraft(row: sqlite3.Row) -> Aircraft:
+        aircraft = Aircraft(int(row["id"]), int(row["aircraft_model_id"]), int(row["company_id"]))
+        if "registration_prefix" in row.keys():
+            aircraft.registration = AircraftRegistration(row["registration_prefix"], row["registration_identifier"])
+        aircraft.purchased_at = datetime.datetime.fromisoformat(row["purchased_at"])
+        return aircraft
