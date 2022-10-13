@@ -1,18 +1,40 @@
-<h3>Register</h3>
+<div class="container-fluid">
+  <div class="row justify-content-center align-content-center min-vh-100">
+    <div class="col-3">
+      <h3>Register</h3>
+      <hr>
+      <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label for="firstname" class="form-label">Firstname</label>
+          <input id="firstname" class="form-control" type="text" formControlName="firstname">
+        </div>
 
-<form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
-  <div>
-    <label for="firstname">
-      Firstname
-    </label>
-    <input id="firstname" type="text" formControlName="firstname">
-  </div>
+        <div class="mb-3">
+          <label for="lastname" class="form-label">Lastname</label>
+          <input id="lastname" type="text" class="form-control" formControlName="lastname">
+        </div>
 
-  <div>
-    <label for="lastname">
-      Lastname
-    </label>
-    <input id="lastname" type="text" formControlName="lastname">
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input id="email" type="text" class="form-control" formControlName="email">
+        </div>
+
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input id="password" type="password" (input)="onPasswordInput()" class="form-control"
+                 formControlName="password">
+        </div>
+
+        <div class="mb-3">
+          <label for="confirm-password" class="form-label">Confirm password</label>
+          <input id="confirm-password" type="password" (input)="onPasswordInput()" class="form-control"
+                 formControlName="confirmPassword">
+        </div>
+
+        <button type="submit" class="button btn btn-primary float-end" [attr.disabled]="submitDisabled ? '' : null">
+          Register
+        </button>
+      </form>
+    </div>
   </div>
-  <button type="submit" class="button">Register</button>
-</form>
+</div>
