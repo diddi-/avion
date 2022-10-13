@@ -16,7 +16,8 @@ setuptools.setup(
         "Flask>=2.0.3, <=2.1.3",
         "flask-restx",
         "werkzeug >=2.1, <2.2",
-        "marshmallow"
+        "marshmallow",
+        "Flask-CORS"
     ],
     extras_require={
         "test": [

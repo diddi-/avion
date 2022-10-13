@@ -1,6 +1,7 @@
 import json
 
 from flask import Flask, Response
+from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_restx import Api
 
@@ -28,6 +29,7 @@ def create_app() -> Flask:
     app.config["JWT_DECODE_ISSUER"] = current_config.jwt.issuer
     app.config["JWT_ENCODE_ISSUER"] = current_config.jwt.issuer
     JWTManager(app)
+    CORS(app)
 
     api.add_namespace(status_namespace, "/status")
     api.add_namespace(company_namespace, "/company")
@@ -38,15 +40,15 @@ def create_app() -> Flask:
     api.add_namespace(profile_namespace, "/profile")
     api.add_namespace(fleet_namespace, "/fleet")
 
-    @app.errorhandler(Exception)
-    def handle_exception(e: Exception) -> Response:
-        """Return JSON instead of HTML for HTTP errors."""
-        body = json.dumps({
-            "error": e.__class__.__name__,
-            "description": str(e),
-        })
-        response = app.make_response((body, 500, ))
-        response.headers.add("Content-Type", "application/json")
-        return response
+    # @app.errorhandler(Exception)
+    # def handle_exception(e: Exception) -> Response:
+    #     """Return JSON instead of HTML for HTTP errors."""
+    #     body = json.dumps({
+    #         "error": e.__class__.__name__,
+    #         "description": str(e),
+    #     })
+    #     response = app.make_response((body, 500, ))
+    #     response.headers.add("Content-Type", "application/json")
+    #     return response
 
     return app
