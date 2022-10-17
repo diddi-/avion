@@ -20,9 +20,6 @@ export class AuthService {
 
   constructor(private router: Router, private http: HttpClient,
               private tokenStorage: TokenStorageService) {
-    if (localStorage.getItem("loggedin")) {
-      this.isLoggedIn = true;
-    }
   }
 
   private handleError(error: HttpErrorResponse) {
@@ -55,8 +52,7 @@ export class AuthService {
   public logout(): void {
     this.isLoggedIn = false;
     this.username = undefined;
-    localStorage.removeItem("loggedin")
-
+    this.tokenStorage.clearAllTokens();
     this.router.navigate(['login']).then();
   }
 }

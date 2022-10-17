@@ -19,4 +19,8 @@ export class TokenStorageService {
 
     throw new TokenNotFoundException();
   }
+
+  public clearAllTokens(): void {
+    localStorage.removeItem("accessToken");
+  }
 }
