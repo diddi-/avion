@@ -33,6 +33,7 @@ export class AuthService {
 
   private handleLogin(data: LoginResponse, onSuccessCb: () => void): void {
     localStorage.setItem("token", data.token);
+    this.isLoggedIn = true;
     if (onSuccessCb)
       onSuccessCb();
   }
