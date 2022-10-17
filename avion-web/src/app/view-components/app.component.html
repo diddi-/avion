@@ -1,0 +1,64 @@
+<div class="page-container" *ngIf="authService.isLoggedIn">
+  <header>
+    <div>
+      <button mat-button class="menu-button" (click)="sidenav.toggle()">
+        <mat-icon>{{ isMenuOpen ? 'menu_open' : 'menu' }}</mat-icon>
+      </button>
+
+      <a routerLink="/">{{ title }}</a>
+    </div>
+
+    <div>
+      <button mat-button class="menu-button" [matMenuTriggerFor]="menu">
+        <mat-icon>person</mat-icon> {{authService.username}}
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>
+          <mat-icon>settings</mat-icon>
+          <span>Settings</span>
+        </button>
+        <button mat-menu-item (click)="authService.logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Log out</span>
+        </button>
+      </mat-menu>
+    </div>
+
+  </header>
+
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav
+      #sidenav
+      autoFocus="false"
+      mode="over"
+      [(opened)]="isMenuOpen"
+      class="sidenav"
+    >
+      <mat-expansion-panel>
+        <mat-expansion-panel-header><mat-panel-title><mat-icon>lan</mat-icon> Infrastructure</mat-panel-title></mat-expansion-panel-header>
+        <a mat-flat-button class="menu-sub-option" routerLink='/router'><i class="nova-tnet--icon nova-tnet--icon--router"></i> Router</a>
+        <a mat-flat-button class="menu-sub-option" routerLink='/connection/create'><mat-icon>cable</mat-icon> Connection</a>
+        <a mat-flat-button class="menu-sub-option" routerLink='/core-region'><mat-icon>public</mat-icon> Core region</a>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header><mat-panel-title><mat-icon>manage_accounts</mat-icon> Customer</mat-panel-title></mat-expansion-panel-header>
+        <a mat-flat-button class="menu-sub-option" routerLink='/vpn'><mat-icon>hub</mat-icon> L3VPN</a>
+        <a mat-flat-button class="menu-sub-option" routerLink='/endpoint'><mat-icon>radio_button_checked</mat-icon> Endpoint</a>
+        <a mat-flat-button class="menu-sub-option" routerLink='/qos-model'><mat-icon>network_check</mat-icon> Quality of Service</a>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header><mat-panel-title><mat-icon>receipt</mat-icon> Order</mat-panel-title></mat-expansion-panel-header>
+        <a mat-flat-button class="menu-sub-option" routerLink='/order'><mat-icon>receipt</mat-icon> All Orders</a>
+      </mat-expansion-panel>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <main>
+        <router-outlet></router-outlet>
+      </main>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
+
+<div *ngIf="!authService.isLoggedIn">
+  <router-outlet></router-outlet>
+</div>

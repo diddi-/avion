@@ -1,0 +1,10 @@
+<mat-card>
+  <mat-card-title>LOGIN</mat-card-title>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="login()">
+      <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
+      <button mat-raised-button color="primary" type="submit" class="btn btn-default" [disabled]="!form.valid || loading" [class.spinner]="loading">Login</button>
+    </form>
+    <p class="error-msg" *ngIf="errorMsg">{{ errorMsg }}</p>
+  </mat-card-content>
+</mat-card>
