@@ -7,6 +7,7 @@ import { Observable, throwError, TimeoutError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { LoginTimeoutException } from './exceptions/login-timeout';
 import { authLoginOptions } from './auth-login-options';
+import { TokenStorageService } from '../token/token-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,8 @@ export class AuthService {
   public token: string | null = null;
   redirectUrl: string | null = null;
 
-  constructor(private router: Router, private http: HttpClient) {
+  constructor(private router: Router, private http: HttpClient,
+              private tokenStorage: TokenStorageService) {
     if (localStorage.getItem("loggedin")) {
       this.isLoggedIn = true;
     }
@@ -32,7 +34,7 @@ export class AuthService {
   }
 
   private handleLogin(data: LoginResponse, onSuccessCb: () => void): void {
-    localStorage.setItem("token", data.token);
+    this.tokenStorage.saveAccessToken(data.token);
     this.isLoggedIn = true;
     if (onSuccessCb)
       onSuccessCb();
