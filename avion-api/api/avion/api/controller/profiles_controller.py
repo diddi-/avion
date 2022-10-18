@@ -11,11 +11,11 @@ from avion.service.profile.model.create_profile_params import CreateProfileParam
 from avion.service.profile.profile_service import ProfileService
 from avion.service.session.http_session import HttpSession
 
-namespace = Namespace("profile")
+namespace = Namespace("profiles")
 
 
 @namespace.route("")
-class ProfileController(Resource):  # type: ignore
+class ProfilesController(Resource):  # type: ignore
     def __init__(self, api: Api):
         super().__init__(api)
         self.api = api

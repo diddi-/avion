@@ -12,7 +12,7 @@ from avion.api.controller.jwt_test_controller import namespace as jwt_test_names
 from avion.api.controller.login_controller import namespace as login_namespace
 from avion.api.controller.status_controller import namespace as status_namespace
 from avion.api.controller.user_account_controller import namespace as account_namespace
-from avion.api.controller.profile_controller import namespace as profile_namespace
+from avion.api.controller.profiles_controller import namespace as profile_namespace
 from avion.api.controller.fleet_controller import namespace as fleet_namespace
 from avion.config.config import current_config
 
