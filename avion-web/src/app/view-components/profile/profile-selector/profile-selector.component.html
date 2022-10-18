@@ -3,7 +3,15 @@
   <p matLine> New Profile</p>
 </a>
 
-<a mat-list-item routerLink="/profile/new" *ngIf="hasProfileSelected()">
-  <mat-icon mat-list-icon>account_circle</mat-icon>
-  <p matLine> {{ getCurrentProfileName() }}</p>
-</a>
+<mat-nav-list *ngIf="hasProfileSelected()">
+  <button mat-list-item [matMenuTriggerFor]="aboveMenu">
+      <mat-icon mat-list-icon>account_circle</mat-icon>
+        <p matLine>{{ getCurrentProfileName() }}</p>
+  </button>
+</mat-nav-list>
+<mat-menu #aboveMenu="matMenu" class="profile-selector-menu" yPosition="above">
+  <button mat-menu-item *ngFor="let profile of getProfileSelectionList()" (click)="profileService.switchProfile(profile)">
+    <mat-icon mat-list-icon>account_circle</mat-icon>
+       {{ profile.firstname }} {{ profile.lastname }}
+  </button>
+</mat-menu>

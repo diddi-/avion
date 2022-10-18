@@ -10,7 +10,7 @@ import { Profile } from '@app/services/profile/model/profile';
 export class ProfileSelectorComponent implements OnInit {
   public currentProfile: Profile | undefined;
 
-  constructor(private profileService: ProfileService) { }
+  constructor(public profileService: ProfileService) { }
 
   ngOnInit(): void {
     this.profileService.profileSwitched$.subscribe(p => this.currentProfile = p);
@@ -23,10 +23,10 @@ export class ProfileSelectorComponent implements OnInit {
   }
 
   public getCurrentProfileName(): string {
-    if(!this.hasProfileSelected())
-      throw new Error("FAIL");
-
     return `${this.currentProfile?.firstname} ${this.currentProfile?.lastname}`;
   }
 
+  public getProfileSelectionList(): Profile[] {
+    return this.profileService.profilesList.filter((p) => p !== this.currentProfile);
+  }
 }

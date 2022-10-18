@@ -31,18 +31,21 @@
       rail-mode
       (openedChange)="onOpenedChange()"
     >
-      <mat-nav-list class="sidnav-items">
-        <a mat-list-item class="menun-sub-option" routerLink='/'><mat-icon mat-list-icon>dashboard</mat-icon><p matLine> Dashboard</p></a>
-        <a mat-list-item class="menun-sub-option" routerLink='/company'><mat-icon mat-list-icon>business</mat-icon><p matLine> Companies</p></a>
-      </mat-nav-list>
-
-      <mat-nav-list class="profile-area">
-        <mat-divider></mat-divider>
+      <div class="sidenav-items">
         <button mat-button class="menu-button" (click)="sidenav.toggle()">
           <mat-icon>{{ isMenuOpen ? 'keyboard_arrow_left' : 'keyboard_arrow_right' }}</mat-icon>
         </button>
+        <mat-divider></mat-divider>
+        <mat-nav-list>
+          <a mat-list-item class="menu-sub-option" routerLink='/'><mat-icon mat-list-icon>dashboard</mat-icon><p matLine> Dashboard</p></a>
+          <a mat-list-item class="menu-sub-option" routerLink='/company'><mat-icon mat-list-icon>business</mat-icon><p matLine> Companies</p></a>
+        </mat-nav-list>
+      </div>
+
+      <div class="profile-area">
+        <mat-divider></mat-divider>
         <app-profile-selector></app-profile-selector>
-      </mat-nav-list>
+      </div>
     </mat-sidenav>
     <mat-sidenav-content>
       <main>

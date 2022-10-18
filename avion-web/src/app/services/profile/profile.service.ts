@@ -54,6 +54,7 @@ export class ProfileService {
   }
 
   public switchProfile(profile: Profile): void {
+    localStorage.setItem("currentProfileId", profile.id.toString());
     this.profileSwitched$.next(profile);
   }
 
