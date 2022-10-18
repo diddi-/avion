@@ -14,19 +14,19 @@ class CompanyRepository:
     def __init__(self, database: str = "/db/airline-api.db"):
         self._db = database
 
-    def create(self, params: CreateCompanyParams) -> Company:
+    def create(self, profile_id: int, params: CreateCompanyParams) -> Company:
         created_at = datetime.datetime.now(datetime.timezone.utc)
         with contextlib.closing(sqlite3.connect(self._db)) as conn:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
             cur.execute("INSERT INTO company (created_at, profile_id, name, balance) "
                         "VALUES (?,?,?,?)",
-                        (created_at, params.owner_id, params.name, params.balance))
+                        (created_at, profile_id, params.name, params.balance))
             conn.commit()
             company_id = cur.lastrowid
             assert company_id is not None
             company = Company(company_id, params.name)
-            company.owner_id = params.owner_id
+            company.owner_id = profile_id
             company.balance = Currency(params.balance)
             company.created_at = created_at
         return company

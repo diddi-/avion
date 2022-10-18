@@ -11,12 +11,12 @@ import { AppComponent } from './view-components/app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormlyMaterialExtrasModule } from './formly.material.extras.module';
 import { LoginComponent } from './view-components/login/login.component';
-import { AuthInterceptor } from './interceptors/auth-interceptor';
 import { DrawerRailModule } from 'angular-material-rail-drawer';
 import { HomeComponent } from './view-components/home/home.component';
 import { CreateProfileComponent } from './view-components/profile/create-profile/create-profile.component';
 import { ProfileSelectorComponent } from './view-components/profile/profile-selector/profile-selector.component';
-
+import { CreateCompanyComponent } from './view-components/company/create-company/create-company.component';
+import { httpInterceptorProviders } from "@app/interceptors";
 
 @NgModule({
   declarations: [
@@ -25,6 +25,7 @@ import { ProfileSelectorComponent } from './view-components/profile/profile-sele
     HomeComponent,
     CreateProfileComponent,
     ProfileSelectorComponent,
+    CreateCompanyComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,9 +46,7 @@ import { ProfileSelectorComponent } from './view-components/profile/profile-sele
     HttpClientModule,
     DrawerRailModule
   ],
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
-  ],
+  providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

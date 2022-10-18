@@ -6,15 +6,13 @@ from avion.service.company.model.create_company_params import CreateCompanyParam
 
 class CreateCompanyParamsSchema(Schema):
     name = fields.String(required=True)
-    owner_id = fields.Integer(required=True)
 
     @staticmethod
     def as_namespace_model(namespace: Namespace) -> OrderedModel:
         return namespace.model("company", {
             "name": restx_fields.String(required=True),
-            "owner_id": restx_fields.Integer(required=True),
         })
 
     @post_load
     def to_obj(self, data, **_) -> CreateCompanyParams:  # type: ignore
-        return CreateCompanyParams(data["name"], data["owner_id"])
+        return CreateCompanyParams(data["name"])

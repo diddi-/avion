@@ -67,7 +67,7 @@ class ProfileRepository:
                             (profile.id,))
                 roles_rows = cur.fetchall()
                 for roles_row in roles_rows:
-                    profile.add_company_role(roles_row[0], CompanyRole(row[1]))
+                    profile.add_company_role(roles_row[0], CompanyRole(roles_row[1]))
                 profiles.append(profile)
         return profiles
 

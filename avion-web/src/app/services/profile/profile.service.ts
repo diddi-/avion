@@ -16,9 +16,8 @@ export class ProfileService {
   public profilesList: Profile[] = [];
 
   constructor(private http: HttpClient) {
-    // Nope, don't like this but will do for now.
-    this.updateProfilesList(() => this.onProfilesListUpdate());
   }
+
   private onProfilesListUpdate(): void {
     const profileId = this.getCurrentProfileId();
     if(!profileId)
@@ -44,17 +43,17 @@ export class ProfileService {
     return parseInt(profileId);
   }
 
-  public updateProfilesList(callback?: () => void): void {
+  public updateProfilesList(): void {
     this.http.get<Profile[]>("/api/profile")
       .subscribe(plist => {
         this.profilesList = plist;
-        if(callback)
-          callback();
-        });
+        this.onProfilesListUpdate();
+      });
   }
 
   public switchProfile(profile: Profile): void {
     localStorage.setItem("currentProfileId", profile.id.toString());
+    this.currentProfile = profile;
     this.profileSwitched$.next(profile);
   }
 

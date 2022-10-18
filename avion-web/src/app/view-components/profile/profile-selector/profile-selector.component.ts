@@ -14,6 +14,7 @@ export class ProfileSelectorComponent implements OnInit {
 
   ngOnInit(): void {
     this.profileService.profileSwitched$.subscribe(p => this.currentProfile = p);
+    this.profileService.updateProfilesList();
   }
 
   public hasProfileSelected(): boolean {
