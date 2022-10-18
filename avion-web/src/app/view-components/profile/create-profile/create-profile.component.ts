@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {FormlyFieldConfig} from "@ngx-formly/core";
 import {UntypedFormGroup} from "@angular/forms";
+import { ProfileService } from '../../../services/profile/profile.service';
+import { CreateProfileParams } from '../../../services/profile/model/create-profile-params';
 
 @Component({
   selector: 'app-create-profile',
@@ -29,12 +31,12 @@ export class CreateProfileComponent implements OnInit {
       }
     },
   ]
-  constructor() { }
+  constructor(private profileService: ProfileService) { }
 
   ngOnInit(): void {
   }
 
   public onSubmit() {
-    console.log("Submitting profile..");
+    this.profileService.createProfile(<CreateProfileParams>this.model)
   }
 }
