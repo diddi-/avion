@@ -2,6 +2,7 @@ import contextlib
 import datetime
 import sqlite3
 from sqlite3 import Row
+from typing import List
 
 from avion.service.company.model.company_role import CompanyRole
 from avion.service.profile.model.profile import Profile
@@ -48,6 +49,27 @@ class ProfileRepository:
             for row in rows:
                 profile.add_company_role(row[0], CompanyRole(row[1]))
             return profile
+
+    def get_profiles_by_account_id(self, account_id: int) -> List[Profile]:
+        profiles: List[Profile] = []
+
+        with contextlib.closing(sqlite3.connect(self._db)) as conn:
+            conn.row_factory = sqlite3.Row
+            cur = conn.cursor()
+            cur.execute("SELECT * FROM profile WHERE user_account_id = ?", (account_id,))
+            rows = cur.fetchall()
+            for row in rows:
+                profile = self._row_to_profile(row)
+
+                # Perhaps fetching the roles should be a different method altogether. This may just be unnecessary
+                # if it's not actually used anywhere.
+                cur.execute("SELECT company_id, role from company_profile_role where profile_id=?",
+                            (profile.id,))
+                roles_rows = cur.fetchall()
+                for roles_row in roles_rows:
+                    profile.add_company_role(roles_row[0], CompanyRole(row[1]))
+                profiles.append(profile)
+        return profiles
 
     def save(self, profile: Profile) -> None:
         with contextlib.closing(sqlite3.connect(self._db)) as conn:

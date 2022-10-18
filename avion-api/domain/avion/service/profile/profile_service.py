@@ -1,3 +1,5 @@
+from typing import List
+
 from avion.config.config import current_config
 from avion.service.company.model.company_role import CompanyRole
 from avion.service.profile.model.profile import Profile
@@ -19,6 +21,9 @@ class ProfileService:
 
     def get_profile(self, profile_id: int) -> Profile:
         return self._repository.get_profile_by_id(profile_id)
+
+    def get_profiles(self, account_id: int) -> List[Profile]:
+        return self._repository.get_profiles_by_account_id(account_id)
 
     def add_company_role(self, profile_id: int, company_id: int, role: CompanyRole) -> None:
         profile = self._repository.get_profile_by_id(profile_id)

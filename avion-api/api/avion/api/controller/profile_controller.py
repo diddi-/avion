@@ -1,4 +1,4 @@
-from typing import cast, Dict, Any
+from typing import cast, Dict, Any, List
 
 from flask import request
 from flask_jwt_extended import jwt_required
@@ -32,3 +32,10 @@ class ProfileController(Resource):  # type: ignore
         params = cast(CreateProfileParams, CreateProfileSchema().load(data))
         params.owner_id = self.http_session.get_current_user().id
         return self.profile_service.create_profile(params)
+
+    @namespace.response(200, "Created",
+                        ProfileSchema.as_namespace_model(namespace))  # type: ignore
+    @namespace.marshal_with(ProfileSchema.as_namespace_model(namespace))  # type: ignore
+    @jwt_required()  # type: ignore
+    def get(self) -> List[Profile]:
+        return self.profile_service.get_profiles(self.http_session.get_current_user().id)
