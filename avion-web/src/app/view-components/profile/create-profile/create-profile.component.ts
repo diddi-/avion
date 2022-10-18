@@ -37,6 +37,6 @@ export class CreateProfileComponent implements OnInit {
   }
 
   public onSubmit() {
-    this.profileService.createProfile(<CreateProfileParams>this.model)
+    this.profileService.createProfile(<CreateProfileParams>this.model);
   }
 }

@@ -8,24 +8,25 @@ import { Profile } from '@app/services/profile/model/profile';
   styleUrls: ['./profile-selector.component.scss']
 })
 export class ProfileSelectorComponent implements OnInit {
+  public currentProfile: Profile | undefined;
 
   constructor(private profileService: ProfileService) { }
 
   ngOnInit(): void {
+    this.profileService.profileSwitched$.subscribe(p => this.currentProfile = p);
   }
 
   public hasProfileSelected(): boolean {
-    if(this.profileService.currentProfile !== undefined)
+    if(this.currentProfile !== undefined)
       return true;
     return false;
   }
 
-  public getCurrentProfileName(): string | undefined {
+  public getCurrentProfileName(): string {
     if(!this.hasProfileSelected())
       throw new Error("FAIL");
 
-    const profile = this.profileService.currentProfile;
-    return `${profile?.firstname} ${profile?.lastname}`;
+    return `${this.currentProfile?.firstname} ${this.currentProfile?.lastname}`;
   }
 
 }

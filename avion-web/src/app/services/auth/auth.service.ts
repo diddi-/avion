@@ -54,6 +54,8 @@ export class AuthService {
               opts.onError(err);
           }
         });
+
+      /* DO WE NEED TO UNSUBSCRIBE HERE ???? */
   }
 
   public logout(): void {
