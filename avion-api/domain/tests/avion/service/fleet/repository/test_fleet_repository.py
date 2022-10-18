@@ -4,7 +4,7 @@ from avion.service.company.model.create_company_params import CreateCompanyParam
 from avion.service.company.repository.company_repository import CompanyRepository
 from avion.service.fleet.model.create_aircraft_model_params import CreateAircraftModelParams
 from avion.service.fleet.repository.fleet_repository import FleetRepository
-from tests.db_initializer import DbInitializer
+from avion.testutils.db_initializer import DbInitializer
 
 
 class TestFleetRepository(TestCase):
@@ -22,7 +22,7 @@ class TestFleetRepository(TestCase):
     def test_aircraft_can_be_added_to_fleet(self) -> None:
         params = CreateAircraftModelParams("Cessna", "172 Skyhawk", "C172")
         model = self.tested_repository.create_aircraft_model(params)
-        company = self.company_repository.create(CreateCompanyParams("SAS", 1))
+        company = self.company_repository.create(123, CreateCompanyParams("SAS", 1))
         assert company.id is not None  # Mypy..
         assert model.id is not None  # Mypy..
         self.tested_repository.add_to_fleet(company.id, model.id)

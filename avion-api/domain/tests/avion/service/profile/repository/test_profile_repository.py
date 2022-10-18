@@ -5,7 +5,7 @@ from avion.service.company.repository.company_repository import CompanyRepositor
 from avion.service.profile.model.create_profile_params import CreateProfileParams
 from avion.service.profile.model.profile import Profile
 from avion.service.profile.repository.profile_repository import ProfileRepository
-from tests.db_initializer import DbInitializer
+from avion.testutils.db_initializer import DbInitializer
 
 
 class TestProfileRepository(TestCase):
