@@ -12,6 +12,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormlyMaterialExtrasModule } from './formly.material.extras.module';
 import { LoginComponent } from './view-components/login/login.component';
 import { AuthInterceptor } from './interceptors/auth-interceptor';
+import { DrawerRailModule } from 'angular-material-rail-drawer';
+
 
 @NgModule({
   declarations: [
@@ -34,7 +36,8 @@ import { AuthInterceptor } from './interceptors/auth-interceptor';
     FormlyMaterialModule,
     BrowserAnimationsModule,
     FormlyMaterialExtrasModule,
-    HttpClientModule
+    HttpClientModule,
+    DrawerRailModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

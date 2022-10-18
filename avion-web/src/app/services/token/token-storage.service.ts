@@ -22,6 +22,13 @@ export class TokenStorageService {
     throw new TokenNotFoundException();
   }
 
+  public hasAccessToken(): boolean {
+    const token = localStorage.getItem("accessToken");
+    if(token)
+      return true;
+    return false;
+  }
+
   public clearAllTokens(): void {
     localStorage.removeItem("accessToken");
   }

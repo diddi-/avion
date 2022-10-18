@@ -1,10 +1,6 @@
 <div class="page-container" *ngIf="authService.isLoggedIn">
   <header>
     <div>
-      <button mat-button class="menu-button" (click)="sidenav.toggle()">
-        <mat-icon>{{ isMenuOpen ? 'menu_open' : 'menu' }}</mat-icon>
-      </button>
-
       <a id="title" routerLink="/">{{ title }}</a>
     </div>
 
@@ -33,23 +29,18 @@
       mode="over"
       [(opened)]="isMenuOpen"
       class="sidenav"
+      rail-mode
     >
-      <mat-expansion-panel>
-        <mat-expansion-panel-header><mat-panel-title><mat-icon>lan</mat-icon> Infrastructure</mat-panel-title></mat-expansion-panel-header>
-        <a mat-flat-button class="menu-sub-option" routerLink='/router'><i class="nova-tnet--icon nova-tnet--icon--router"></i> Router</a>
-        <a mat-flat-button class="menu-sub-option" routerLink='/connection/create'><mat-icon>cable</mat-icon> Connection</a>
-        <a mat-flat-button class="menu-sub-option" routerLink='/core-region'><mat-icon>public</mat-icon> Core region</a>
-      </mat-expansion-panel>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header><mat-panel-title><mat-icon>manage_accounts</mat-icon> Customer</mat-panel-title></mat-expansion-panel-header>
-        <a mat-flat-button class="menu-sub-option" routerLink='/vpn'><mat-icon>hub</mat-icon> L3VPN</a>
-        <a mat-flat-button class="menu-sub-option" routerLink='/endpoint'><mat-icon>radio_button_checked</mat-icon> Endpoint</a>
-        <a mat-flat-button class="menu-sub-option" routerLink='/qos-model'><mat-icon>network_check</mat-icon> Quality of Service</a>
-      </mat-expansion-panel>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header><mat-panel-title><mat-icon>receipt</mat-icon> Order</mat-panel-title></mat-expansion-panel-header>
-        <a mat-flat-button class="menu-sub-option" routerLink='/order'><mat-icon>receipt</mat-icon> All Orders</a>
-      </mat-expansion-panel>
+      <mat-nav-list class="sidnav-items">
+        <a mat-list-item class="menun-sub-option" routerLink='/'><mat-icon mat-list-icon>dashboard</mat-icon><p matLine> Dashboard</p></a>
+      </mat-nav-list>
+      <mat-nav-list class="profile-area">
+        <mat-divider></mat-divider>
+        <button mat-button class="menu-button" (click)="sidenav.toggle()">
+          <mat-icon>{{ isMenuOpen ? 'keyboard_arrow_left' : 'keyboard_arrow_right' }}</mat-icon>
+        </button>
+        <a mat-list-item class="menu-sub-option"><mat-icon mat-list-icon>account_circle</mat-icon><p matLine> John Doe</p></a>
+      </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>
       <main>

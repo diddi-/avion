@@ -21,6 +21,9 @@ export class AuthService {
 
   constructor(private router: Router, private http: HttpClient,
               private tokenStorage: TokenStorageService) {
+
+    if(this.tokenStorage.hasAccessToken())
+      this.isLoggedIn = true;
   }
 
   private handleError(error: HttpErrorResponse) {

@@ -7,3 +7,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .error-msg {
   color: red;
 }
+
+// This can't be styled in app.component.scss
+// https://github.com/angular/components/issues/13983
+.mat-drawer-inner-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+}
