@@ -6,6 +6,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, TimeoutError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { LoginTimeoutException } from './exceptions/login-timeout';
+import { InvalidCredentialsException } from './exceptions/invalid-credentials-exception';
 import { authLoginOptions } from './auth-login-options';
 import { TokenStorageService } from '../token/token-storage.service';
 
@@ -25,6 +26,9 @@ export class AuthService {
   private handleError(error: HttpErrorResponse) {
     if (error.status === 504) {
       return throwError(() => new LoginTimeoutException());
+    }
+    else if (error.status === 401) {
+      return throwError(() => new InvalidCredentialsException());
     }
     // Return an observable with a user-facing error message.
     return throwError(() => new Error('Something bad happened; please try again later.'));

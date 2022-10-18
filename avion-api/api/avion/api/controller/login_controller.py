@@ -1,10 +1,12 @@
 from typing import cast, Dict, Any
 
 from flask import request
-from flask_restx import Namespace, Resource, Api
+from flask_restx import Namespace, Resource, Api, abort
+from flask_restx._http import HTTPStatus
 
 from avion.api.input.schema.login_request_schema import LoginRequestSchema
 from avion.api.schema.login_response_schema import LoginResponseSchema
+from avion.service.account.exceptions.login_failed_exception import LoginFailedException
 from avion.service.account.model.login_request import LoginRequest
 from avion.service.account.model.login_response import LoginResponse
 from avion.service.account.user_account_service import UserAccountService
@@ -26,4 +28,7 @@ class LoginController(Resource):  # type: ignore
     def post(self) -> LoginResponse:
         data = cast(Dict[str, Any], request.json)
         login_request = cast(LoginRequest, LoginRequestSchema().load(data))
-        return self.user_account_service.login(login_request)
+        try:
+            return self.user_account_service.login(login_request)
+        except LoginFailedException as e:
+            abort(HTTPStatus.UNAUTHORIZED, str(e))

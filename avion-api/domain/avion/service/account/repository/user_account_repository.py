@@ -4,6 +4,7 @@ import sqlite3
 from sqlite3 import Row
 from typing import List
 
+from avion.service.account.exceptions.no_such_user_exception import NoSuchUserException
 from avion.service.account.model.hashed_password import HashedPassword
 from avion.service.account.model.user_account import UserAccount
 from avion.service.account.model.create_user_account_params import CreateUserAccountParams
@@ -61,15 +62,18 @@ class UserAccountRepository:
             cur = conn.cursor()
             cur.execute("SELECT COUNT(*) FROM user_account WHERE username=? AND password=?",
                         (username, password.password))
-            count = int(cur.fetchone()[0])  # Make mypy happy
-            return count == 1
+            row = cur.fetchone()
+            return row is not None
 
     def get_salt(self, username: str) -> str:
         with contextlib.closing(sqlite3.connect(self._db)) as conn:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
             cur.execute("SELECT salt FROM user_account WHERE username=?", (username,))
-            return str(cur.fetchone()[0])
+            row = cur.fetchone()
+            if not row:
+                raise NoSuchUserException()
+            return str(row[0])
 
     @staticmethod
     def _row_to_user_account(row: Row) -> UserAccount:

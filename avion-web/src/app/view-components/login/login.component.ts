@@ -48,7 +48,6 @@ export class LoginComponent implements OnInit{
 
   onLoginError(err: Error): void {
     this.errorMsg = err.toString();
-    console.log(err);
     this.loading = false;
   }
 

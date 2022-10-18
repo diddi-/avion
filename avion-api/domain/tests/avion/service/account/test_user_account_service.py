@@ -3,7 +3,7 @@ from unittest import TestCase
 
 from mockito import when, mock, ANY
 
-from avion.service.account.exceptions.invalid_credentials_exception import InvalidCredentialsException
+from avion.service.account.exceptions.login_failed_exception import LoginFailedException
 from avion.service.account.model.hashed_password import HashedPassword
 from avion.service.account.model.jwt_access_token import JwtAccessToken
 from avion.service.account.model.login_request import LoginRequest
@@ -31,7 +31,7 @@ class TestUserAccountService(TestCase):
         when(self.stubbed_repo).get_salt(request.username).thenReturn(password.salt)
         when(self.stubbed_repo).validate_credentials(request.username, password).thenReturn(False)
 
-        with self.assertRaises(InvalidCredentialsException):
+        with self.assertRaises(LoginFailedException):
             self.tested_service.login(request)
 
     @unittest.skip("Access token generation needs an active Flask context. Requires refactor.")

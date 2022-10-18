@@ -4,6 +4,8 @@ import { TokenNotFoundException } from './exceptions/token-not-found-exception';
 @Injectable({
   providedIn: 'root'
 })
+// NOTE: There are some serious considerations to be made here. Storing tokens in localStorage may or may not be
+// a safe thing due to XSS.
 export class TokenStorageService {
 
   constructor() { }
