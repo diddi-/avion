@@ -30,7 +30,7 @@ export class ProfileService {
   }
 
   public createProfile(params: CreateProfileParams): void {
-    this.http.post<Profile>("/api/profile", params)
+    this.http.post<Profile>("/api/profiles", params)
       .pipe(retry({count: 3, delay: 1000}))
       .subscribe((p) => this.switchProfile(p));
   }
@@ -44,7 +44,7 @@ export class ProfileService {
   }
 
   public updateProfilesList(): void {
-    this.http.get<Profile[]>("/api/profile")
+    this.http.get<Profile[]>("/api/profiles")
       .subscribe(plist => {
         this.profilesList = plist;
         this.onProfilesListUpdate();
@@ -57,4 +57,7 @@ export class ProfileService {
     this.profileSwitched$.next(profile);
   }
 
+  public getDetailedProfile(): Observable<Profile> {
+    return this.http.get<Profile>("/api/profile");
+  }
 }

@@ -14,11 +14,15 @@ export class ProfileInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler):
     Observable<HttpEvent<any>> {
-    if(this.profileService.currentProfile !== undefined) {
+    try {
+      const profileId = this.profileService.getCurrentProfileId();
       const profileReq = req.clone({
-            headers: req.headers.set('X-PROFILE-ID', this.profileService.currentProfile.id.toString())
-          });
-      return next.handle(profileReq);
+        headers: req.headers.set('X-PROFILE-ID', profileId.toString())
+      });
+        return next.handle(profileReq);
+    }
+    catch(e) {
+      // Ignore for now.
     }
 
     // Default do nothing

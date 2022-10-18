@@ -4,6 +4,7 @@ import { LoginComponent } from './view-components/login/login.component';
 import { HomeComponent } from './view-components/home/home.component';
 import { CreateProfileComponent } from './view-components/profile/create-profile/create-profile.component';
 import { CreateCompanyComponent } from '@app/view-components/company/create-company/create-company.component';
+import { DetailedProfileViewComponent } from "@app/view-components/profile/detailed-profile-view/detailed-profile-view.component";
 
 const routes: Routes = [
   {
@@ -14,6 +15,7 @@ const routes: Routes = [
       {
         path: 'profile',
         children: [
+          {path: '', component: DetailedProfileViewComponent},
           {path: 'new', component: CreateProfileComponent}
         ]
       },

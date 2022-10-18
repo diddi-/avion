@@ -13,4 +13,13 @@
     <mat-icon mat-list-icon>account_circle</mat-icon>
        {{ profile.firstname }} {{ profile.lastname }}
   </button>
+  <a mat-menu-item routerLink="/profile/new" >
+    <mat-icon mat-list-icon>person_add</mat-icon>
+     New Profile
+  </a>
+  <mat-divider></mat-divider>
+  <a mat-menu-item routerLink="/profile" >
+    <mat-icon mat-list-icon>settings</mat-icon>
+     Settings
+  </a>
 </mat-menu>
