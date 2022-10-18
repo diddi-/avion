@@ -26,14 +26,16 @@
     <mat-sidenav
       #sidenav
       autoFocus="false"
-      mode="over"
       [(opened)]="isMenuOpen"
       class="sidenav"
       rail-mode
+      (openedChange)="onOpenedChange()"
     >
       <mat-nav-list class="sidnav-items">
         <a mat-list-item class="menun-sub-option" routerLink='/'><mat-icon mat-list-icon>dashboard</mat-icon><p matLine> Dashboard</p></a>
+        <a mat-list-item class="menun-sub-option" routerLink='/company'><mat-icon mat-list-icon>business</mat-icon><p matLine> Companies</p></a>
       </mat-nav-list>
+
       <mat-nav-list class="profile-area">
         <mat-divider></mat-divider>
         <button mat-button class="menu-button" (click)="sidenav.toggle()">

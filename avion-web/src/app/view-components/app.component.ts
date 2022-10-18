@@ -22,6 +22,13 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.router.events
       .pipe(filter(evt => evt instanceof NavigationStart))
-      .subscribe(evt => this.isMenuOpen = false)
+      .subscribe(evt => {
+        const state = localStorage.getItem("sidenavOpened");
+        this.isMenuOpen = state === "true" ? true : false;
+      });
+  }
+
+  public onOpenedChange(): void {
+    localStorage.setItem("sidenavOpened", this.isMenuOpen.toString());
   }
 }
