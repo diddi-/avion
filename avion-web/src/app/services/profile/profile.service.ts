@@ -9,7 +9,7 @@ import { Profile } from './model/profile';
 })
 export class ProfileService {
 
-  public currentProfile: Profile | null = null;
+  public currentProfile: Profile | undefined;
 
   constructor(private http: HttpClient) { }
 

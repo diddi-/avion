@@ -41,7 +41,7 @@
         <button mat-button class="menu-button" (click)="sidenav.toggle()">
           <mat-icon>{{ isMenuOpen ? 'keyboard_arrow_left' : 'keyboard_arrow_right' }}</mat-icon>
         </button>
-        <a mat-list-item class="menu-sub-option" routerLink="/profile/new"><mat-icon mat-list-icon>person_add</mat-icon><p matLine> New Profile</p></a>
+        <app-profile-selector></app-profile-selector>
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>

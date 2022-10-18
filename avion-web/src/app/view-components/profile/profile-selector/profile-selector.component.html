@@ -1,0 +1,9 @@
+<a mat-list-item routerLink="/profile/new" *ngIf="!hasProfileSelected()">
+  <mat-icon mat-list-icon>person_add</mat-icon>
+  <p matLine> New Profile</p>
+</a>
+
+<a mat-list-item routerLink="/profile/new" *ngIf="hasProfileSelected()">
+  <mat-icon mat-list-icon>account_circle</mat-icon>
+  <p matLine> {{ getCurrentProfileName() }}</p>
+</a>

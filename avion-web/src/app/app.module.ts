@@ -15,6 +15,7 @@ import { AuthInterceptor } from './interceptors/auth-interceptor';
 import { DrawerRailModule } from 'angular-material-rail-drawer';
 import { HomeComponent } from './view-components/home/home.component';
 import { CreateProfileComponent } from './view-components/profile/create-profile/create-profile.component';
+import { ProfileSelectorComponent } from './view-components/profile/profile-selector/profile-selector.component';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { CreateProfileComponent } from './view-components/profile/create-profile
     LoginComponent,
     HomeComponent,
     CreateProfileComponent,
+    ProfileSelectorComponent,
   ],
   imports: [
     BrowserModule,
