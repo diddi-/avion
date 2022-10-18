@@ -13,12 +13,14 @@ import { FormlyMaterialExtrasModule } from './formly.material.extras.module';
 import { LoginComponent } from './view-components/login/login.component';
 import { AuthInterceptor } from './interceptors/auth-interceptor';
 import { DrawerRailModule } from 'angular-material-rail-drawer';
+import { HomeComponent } from './view-components/home/home.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
