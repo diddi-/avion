@@ -1,11 +1,12 @@
 import datetime
-from typing import Optional, Any
+from typing import Any
 
 
 class UserAccount:
     """ A User Account represents a physical user and its personal details. """
-    def __init__(self, firstname: str, lastname: str, email: str, username: str):
-        self._id: Optional[int] = None
+    # pylint: disable=too-many-arguments
+    def __init__(self, account_id: int, firstname: str, lastname: str, email: str, username: str):
+        self._id = account_id
         self._created_at: datetime.datetime = datetime.datetime.now(datetime.timezone.utc)
         self._firstname = firstname
         self._lastname = lastname
@@ -29,12 +30,8 @@ class UserAccount:
         self._lastname = value
 
     @property
-    def id(self) -> Optional[int]:
+    def id(self) -> int:
         return self._id
-
-    @id.setter
-    def id(self, value: int) -> None:
-        self._id = value
 
     @property
     def created_at(self) -> datetime.datetime:

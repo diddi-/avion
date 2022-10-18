@@ -7,8 +7,8 @@ from avion.service.company.model.company_role import CompanyRole
 class Profile:
     """ A Profile represents an in-game person with its details. This is different
     from a User Account in that a User may play using several Profiles. """
-    def __init__(self, firstname: str, lastname: str):
-        self._id: Optional[int] = None
+    def __init__(self, profile_id: int, firstname: str, lastname: str):
+        self._id = profile_id
         self._created_at: Optional[datetime.datetime] = None
         self._owner_id: Optional[int] = None
         self._firstname = firstname
@@ -55,12 +55,8 @@ class Profile:
         self._lastname = value
 
     @property
-    def id(self) -> Optional[int]:
+    def id(self) -> int:
         return self._id
-
-    @id.setter
-    def id(self, value: int) -> None:
-        self._id = value
 
     @property
     def created_at(self) -> Optional[datetime.datetime]:

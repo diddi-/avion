@@ -23,7 +23,7 @@ class TestFleetService(TestCase):
 
     @parameterized.expand([(CompanyRole.CEO,), (CompanyRole.FLEET_MGMT,)])  # type: ignore
     def test_CEO_and_FLEET_MGMT_roles_can_buy_new_aircraft(self, role: CompanyRole) -> None:
-        profile = Profile("John", "Doe")
+        profile = Profile(123, "John", "Doe")
         company_id = 1
         model = AircraftModel("Cessna", "172", "C172")
         model.id = 1
@@ -39,7 +39,7 @@ class TestFleetService(TestCase):
         verify(self.stubbed_fleet_repo).add_to_fleet(company_id, model.id)
 
     def test_exception_is_raised_when_unauthorized_role_attempts_to_buy_aircraft(self) -> None:
-        profile = Profile("John", "Doe")
+        profile = Profile(123, "John", "Doe")
         company_id = 1
         aircraft_model_id = 1
         profile.add_company_role(company_id, CompanyRole.HR)
@@ -48,7 +48,7 @@ class TestFleetService(TestCase):
         self.assertIn("Unauthorized", str(err.exception))
 
     def test_money_is_withdrawn_from_company_when_buying_aircraft(self) -> None:
-        profile = Profile("John", "Doe")
+        profile = Profile(123, "John", "Doe")
         company_id = 1
         aircraft_model = AircraftModel("Cessna", "172", "C172")
         aircraft_model.id = 1
@@ -64,7 +64,7 @@ class TestFleetService(TestCase):
         verify(self.stubbed_company_service).withdraw(company_id, aircraft_model.price)
 
     def test_aircraft_is_registered_when_buying_it(self) -> None:
-        profile = Profile("John", "Doe")
+        profile = Profile(123, "John", "Doe")
         company_id = 1
         model = AircraftModel("Cessna", "172", "C172")
         model.id = 1

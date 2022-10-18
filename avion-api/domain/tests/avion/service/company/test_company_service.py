@@ -18,8 +18,7 @@ class TestCompanyService(TestCase):
                                              profile_service=self.stubbed_profile_service)
 
     def test_company_can_be_created(self) -> None:
-        profile = Profile("John", "Doe")
-        profile.id = 123
+        profile = Profile(123, "John", "Doe")
         params = CreateCompanyParams("SAS", 10000)
         expected_company = Company(1, params.name)
         when(self.stubbed_repo).create(profile.id, params).thenReturn(expected_company)
@@ -43,8 +42,7 @@ class TestCompanyService(TestCase):
         self.assertIn("Insufficient funds", str(err.exception))
 
     def test_CEO_role_is_automatically_added_to_owner_of_a_new_company(self) -> None:
-        profile = Profile("John", "Doe")
-        profile.id = 123
+        profile = Profile(123, "John", "Doe")
         params = CreateCompanyParams("SAS", 10000)
         company = Company(1, params.name)
         when(self.stubbed_repo).create(profile.id, params).thenReturn(company)

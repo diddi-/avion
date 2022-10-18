@@ -15,16 +15,20 @@ class UserAccountRepository:
         self._db = database
 
     def create(self, params: CreateUserAccountParams, password: HashedPassword) -> UserAccount:
-        user = UserAccount(params.firstname, params.lastname, params.email, params.email)
+        created_at = datetime.datetime.now(datetime.timezone.utc)
         with contextlib.closing(sqlite3.connect(self._db)) as conn:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
             cur.execute("INSERT INTO user_account (created_at, firstname, lastname, email, username, password, salt) "
                         "VALUES (?,?,?,?,?,?,?)",
-                        (user.created_at, user.firstname, user.lastname, user.email, user.username, password.password,
+                        (created_at, params.firstname, params.lastname, params.email, params.email, password.password,
                          password.salt))
             conn.commit()
-            user.id = cur.lastrowid
+            user_id = cur.lastrowid
+            if not user_id:
+                raise RuntimeError(f"User Account {params.email} did not receive a row ID!")
+            user = UserAccount(user_id, params.firstname, params.lastname, params.email, params.email)
+            user.created_at = created_at
         return user
 
     def get_all_user_accounts(self) -> List[UserAccount]:
@@ -63,7 +67,7 @@ class UserAccountRepository:
             cur.execute("SELECT COUNT(*) FROM user_account WHERE username=? AND password=?",
                         (username, password.password))
             row = cur.fetchone()
-            return row is not None
+            return row is not None and row[0] == 1
 
     def get_salt(self, username: str) -> str:
         with contextlib.closing(sqlite3.connect(self._db)) as conn:
@@ -77,7 +81,6 @@ class UserAccountRepository:
 
     @staticmethod
     def _row_to_user_account(row: Row) -> UserAccount:
-        user = UserAccount(row["firstname"], row["lastname"], row["email"], row["username"])
+        user = UserAccount(int(row["id"]), row["firstname"], row["lastname"], row["email"], row["username"])
         user.created_at = datetime.datetime.fromisoformat(row["created_at"])
-        user.id = row["id"]
         return user

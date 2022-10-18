@@ -13,8 +13,7 @@ class TestProfileService(TestCase):
         self.tested_service = ProfileService(repository=self.stubbed_profile_repo)
 
     def test_company_role_can_be_added_to_profile(self) -> None:
-        profile = Profile("John", "Doe")
-        profile.id = 1
+        profile = Profile(123, "John", "Doe")
         company_id = 1
         role = CompanyRole.CEO
 

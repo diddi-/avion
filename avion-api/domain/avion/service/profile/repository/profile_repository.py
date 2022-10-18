@@ -14,18 +14,23 @@ class ProfileRepository:
         self._db = database
 
     def create(self, params: CreateProfileParams) -> Profile:
-        profile = Profile(params.firstname, params.lastname)
-        profile.created_at = datetime.datetime.now(datetime.timezone.utc)
-        profile.owner_id = params.owner_id
-        profile.balance = params.balance
+        created_at = datetime.datetime.now(datetime.timezone.utc)
+
         with contextlib.closing(sqlite3.connect(self._db)) as conn:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
             cur.execute("INSERT INTO profile (created_at, user_account_id, firstname, lastname, balance) "
                         "VALUES (?,?,?,?,?)",
-                        (profile.created_at, profile.owner_id, profile.firstname, profile.lastname, profile.balance))
+                        (created_at, params.owner_id, params.firstname, params.lastname, params.balance))
             conn.commit()
-            profile.id = cur.lastrowid
+            profile_id = cur.lastrowid
+            if not profile_id:
+                raise RuntimeError(f"Profile {params.firstname} {params.lastname}, owner={params.owner_id} did not "
+                                   "receive a row id!")
+            profile = Profile(profile_id, params.firstname, params.lastname)
+            profile.owner_id = params.owner_id
+            profile.created_at = created_at
+            profile.balance = params.balance
         return profile
 
     def account_has_profile(self, account_id: int, profile_id: int) -> bool:
@@ -86,8 +91,7 @@ class ProfileRepository:
 
     @staticmethod
     def _row_to_profile(row: Row) -> Profile:
-        profile = Profile(row["firstname"], row["lastname"])
+        profile = Profile(int(row["id"]), row["firstname"], row["lastname"])
         profile.created_at = datetime.datetime.fromisoformat(row["created_at"])
-        profile.id = row["id"]
         profile.balance = row["balance"]
         return profile

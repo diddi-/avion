@@ -20,7 +20,7 @@ class TestUserAccountService(TestCase):
 
     def test_user_account_is_returned_after_registration(self) -> None:
         params = CreateUserAccountParams("John", "Doe", "john@example.com", "secret")
-        expected_account = UserAccount(params.firstname, params.lastname, params.email, params.email)
+        expected_account = UserAccount(1, params.firstname, params.lastname, params.email, params.email)
         when(self.stubbed_repo).create(params, ANY(HashedPassword)).thenReturn(expected_account)
         actual_account = self.tested_service.register(params)
         self.assertEqual(expected_account, actual_account)
