@@ -1,6 +1,6 @@
 import json
 
-from flask import Flask, Response, g
+from flask import Flask, Response
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_restx import Api

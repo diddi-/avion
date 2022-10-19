@@ -13,7 +13,7 @@ class TestUserAccountRepository(TestCase):
     def setUp(self) -> None:
         self.initializer = DbInitializer()
 
-    def test_initial_seeded_admin_user_can_login(self):
+    def test_initial_seeded_admin_user_can_login(self) -> None:
         self.initializer.run(include_seeds=True)
         repository = UserAccountRepository(database=self.initializer.db_path)
         salt = repository.get_salt("admin")

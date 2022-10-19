@@ -22,7 +22,7 @@ class TestContainer(TestCase):
 
     def test_container_can_resolve_instances_with_custom_arguments(self) -> None:
         class Service:
-            def __init__(self, name="default"):
+            def __init__(self, name: str = "default") -> None:
                 self.name = name
 
         expected_name = "custom_name"

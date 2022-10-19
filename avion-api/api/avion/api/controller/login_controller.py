@@ -1,6 +1,6 @@
 from typing import cast, Dict, Any
 
-from flask import request, g, current_app
+from flask import request, current_app
 from flask_restx import Namespace, Resource, Api
 from flask_restx._http import HTTPStatus
 

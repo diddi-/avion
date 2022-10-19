@@ -9,9 +9,9 @@ T = TypeVar("T")
 
 class Container:
     def __init__(self) -> None:
-        self._providers: Dict[Any, Provider] = {}
+        self._providers: Dict[Any, Provider[Any]] = {}
 
-    def _provider_callback(self, provider: Provider) -> None:
+    def _provider_callback(self, provider: Provider[Any]) -> None:
         self._providers[provider.provides_for] = provider
 
     def resolve(self, typ: Type[T]) -> Using[T]:

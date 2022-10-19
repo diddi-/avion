@@ -10,7 +10,7 @@ class DbInitializer:
         self.temp_dir = tempfile.TemporaryDirectory()  # pylint: disable=consider-using-with
         self.db_path = os.path.join(self.temp_dir.name, "test.db")
 
-    def run(self, include_seeds=False) -> None:
+    def run(self, include_seeds: bool = False) -> None:
         with contextlib.closing(sqlite3.connect(self.db_path)) as conn:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
