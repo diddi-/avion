@@ -1,6 +1,6 @@
 from typing import cast, Dict, Any
 
-from flask import request, g
+from flask import request, g, current_app
 from flask_restx import Namespace, Resource, Api
 from flask_restx._http import HTTPStatus
 
@@ -21,7 +21,7 @@ class LoginController(Resource):  # type: ignore
     def __init__(self, api: Api):
         super().__init__(api)
         self.api = api
-        self.container = cast(Container, g.get("container"))
+        self.container = cast(Container, current_app.config["DIContainer"])
         self.user_account_service = self.container.get_instance(UserAccountService)
 
     @namespace.expect(LoginRequestSchema.as_namespace_model(namespace))  # type: ignore

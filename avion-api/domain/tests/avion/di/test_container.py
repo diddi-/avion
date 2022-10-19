@@ -19,3 +19,16 @@ class TestContainer(TestCase):
         instance = container.get_instance(Service)
         self.assertIsInstance(instance, Service)
         self.assertIsInstance(instance.http, HttpClient)
+
+    def test_container_can_resolve_instances_with_custom_arguments(self) -> None:
+        class Service:
+            def __init__(self, name="default"):
+                self.name = name
+
+        expected_name = "custom_name"
+        container = Container()
+        container.resolve(Service).using(Service, {"name": expected_name})
+
+        instance = container.get_instance(Service)
+        self.assertIsInstance(instance, Service)
+        self.assertEqual(expected_name, instance.name)

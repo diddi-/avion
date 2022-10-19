@@ -1,6 +1,6 @@
 import json
 
-from flask import Flask, Response
+from flask import Flask, Response, g
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_restx import Api
@@ -14,9 +14,11 @@ from avion.api.controller.profile_controller import namespace as profile_namespa
 from avion.api.controller.profiles_controller import namespace as profiles_namespace
 from avion.api.controller.status_controller import namespace as status_namespace
 from avion.api.controller.user_account_controller import namespace as account_namespace
-from avion.api.flask_container import FlaskContainer
 from avion.api.http_exception import HttpException
 from avion.config.config import current_config
+from avion.di.container import Container
+from avion.service.account.repository.user_account_repository import UserAccountRepository
+from avion.service.account.user_account_service import UserAccountService
 
 
 def create_app() -> Flask:
@@ -32,7 +34,11 @@ def create_app() -> Flask:
     app.config["JWT_ENCODE_ISSUER"] = current_config.jwt.issuer
     JWTManager(app)
     CORS(app)
-    FlaskContainer(app)
+
+    container = Container()
+    container.resolve(UserAccountService).using(UserAccountService)
+    container.resolve(UserAccountRepository).using(UserAccountRepository)
+    app.config["DIContainer"] = container
 
     api.add_namespace(status_namespace, "/status")
     api.add_namespace(company_namespace, "/company")

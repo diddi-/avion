@@ -2,22 +2,24 @@ from inspect import signature
 from typing import TypeVar, Dict, Type, cast, Any
 
 from avion.di.provider import Provider
+from avion.di.using import Using
 
 T = TypeVar("T")
 
+
 class Container:
     def __init__(self) -> None:
-        self._providers: Dict[Any, Any] = {}
+        self._providers: Dict[Any, Provider] = {}
 
-    def _provider_callback(self, typ: Type[T], cls: Type[T]) -> None:
-        self._providers[typ] = cls
+    def _provider_callback(self, provider: Provider) -> None:
+        self._providers[provider.provides_for] = provider
 
-    def resolve(self, typ: Type[T]) -> Provider[T]:
-        return Provider[T](typ, self._provider_callback)
+    def resolve(self, typ: Type[T]) -> Using[T]:
+        return Using[T](typ, self._provider_callback)
 
     def get_instance(self, typ: Type[T]) -> T:
-        cls = self._providers[typ]
-        sig = signature(cls.__init__)
+        provider = self._providers[typ]
+        sig = signature(provider.provider.__init__)
         args = []
         kwargs = {}
         for param_name, param in sig.parameters.items():
@@ -26,4 +28,7 @@ class Container:
                     args.append(self.get_instance(param.annotation))
                 else:
                     kwargs[param_name] = self.get_instance(param.annotation)
-        return cast(T, cls(*args, **kwargs))
+
+        for k, v in provider.custom_kwargs.items():
+            kwargs[k] = v
+        return cast(T, provider.provider(*args, **kwargs))

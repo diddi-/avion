@@ -12,14 +12,21 @@ class TestUserAccountRepository(TestCase):
 
     def setUp(self) -> None:
         self.initializer = DbInitializer()
-        self.initializer.run()
+
+    def test_initial_seeded_admin_user_can_login(self):
+        self.initializer.run(include_seeds=True)
+        repository = UserAccountRepository(database=self.initializer.db_path)
+        salt = repository.get_salt("admin")
+        self.assertTrue(repository.validate_credentials("admin", HashedPassword("admin", salt)))
 
     def test_user_account_can_be_created(self) -> None:
+        self.initializer.run()
         params = CreateUserAccountParams("John", "Doe", "john@example.com", "secret")
         user = UserAccountRepository(database=self.initializer.db_path).create(params, HashedPassword("secret"))
         self.assertIsNotNone(user.id)
 
     def test_get_all_user_accounts(self) -> None:
+        self.initializer.run()
         john = CreateUserAccountParams("John", "Doe", "john@example.com", "secret")
         trevor = CreateUserAccountParams("Trevor", "Doe", "trevor@example.com", "abcde")
         repository = UserAccountRepository(database=self.initializer.db_path)
@@ -32,6 +39,7 @@ class TestUserAccountRepository(TestCase):
         self.assertEqual(users[1].firstname, trevor.firstname)
 
     def test_username_must_be_unique(self) -> None:
+        self.initializer.run()
         params = CreateUserAccountParams("John", "Doe", "john@example.com", "secret")
         repository = UserAccountRepository(database=self.initializer.db_path)
         repository.create(params, HashedPassword(params.password))
@@ -41,6 +49,7 @@ class TestUserAccountRepository(TestCase):
         self.assertIn("UNIQUE constraint failed: user_account.username", str(err.exception))
 
     def test_created_at_field_is_set_when_creating_new_account(self) -> None:
+        self.initializer.run()
         params = CreateUserAccountParams("John", "Doe", "john@example.com", "secret")
         user = UserAccountRepository(database=self.initializer.db_path).create(params, HashedPassword(params.password))
 
@@ -49,6 +58,7 @@ class TestUserAccountRepository(TestCase):
         self.assertLess(delta, datetime.timedelta(seconds=10))
 
     def test_user_can_be_fetched_by_username(self) -> None:
+        self.initializer.run()
         params = CreateUserAccountParams("John", "Doe", "john@example.com", "secret")
         repository = UserAccountRepository(database=self.initializer.db_path)
         expected_user = repository.create(params, HashedPassword(params.password))
@@ -56,6 +66,7 @@ class TestUserAccountRepository(TestCase):
         self.assertEqual(expected_user, actual_user)
 
     def test_user_can_be_fetched_by_id(self) -> None:
+        self.initializer.run()
         params = CreateUserAccountParams("John", "Doe", "john@example.com", "secret")
         repository = UserAccountRepository(database=self.initializer.db_path)
         expected_user = repository.create(params, HashedPassword(params.password))
@@ -64,6 +75,7 @@ class TestUserAccountRepository(TestCase):
         self.assertEqual(expected_user, actual_user)
 
     def test_password_can_be_validated(self) -> None:
+        self.initializer.run()
         params = CreateUserAccountParams("John", "Doe", "john@example.com", "secret")
         repository = UserAccountRepository(database=self.initializer.db_path)
         correct_password = HashedPassword(params.password)
@@ -73,6 +85,7 @@ class TestUserAccountRepository(TestCase):
         self.assertFalse(repository.validate_credentials(user.username, wrong_password), "Wrong password is valid")
 
     def test_salt_can_be_retrieved(self) -> None:
+        self.initializer.run()
         params = CreateUserAccountParams("John", "Doe", "john@example.com", "secret")
         repository = UserAccountRepository(database=self.initializer.db_path)
         password = HashedPassword("secret")

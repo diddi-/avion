@@ -1,13 +1,13 @@
 import json
 from unittest import TestCase
 
-from avion.testutils.flask_client import FlaskClient
+from avion.testutils.flask_test_client import FlaskTestClient
 
 
 class TestStatusController(TestCase):
 
     def setUp(self) -> None:
-        self.client = FlaskClient()
+        self.client = FlaskTestClient()
 
     def test_status_returns_OK(self) -> None:
         response = self.client.get("/status")
