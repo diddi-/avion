@@ -1,7 +1,7 @@
+import unittest
 from http import HTTPStatus
 from unittest import TestCase
 
-import pytest
 from mockito import mock, when, ANY
 
 from avion.service.account.exceptions.login_failed_exception import LoginFailedException
@@ -13,7 +13,7 @@ class TestLoginController(TestCase):
     def setUp(self) -> None:
         self.client = FlaskClient()
 
-    @pytest.skip("Waiting for DI support")
+    @unittest.skip("Waiting for DI support")
     def test_login_returns_Unauthorized_when_wrong_credentials_are_entered(self) -> None:
         stubbed_service = mock()
         when(stubbed_service).login(ANY(LoginRequest)).thenRaise(LoginFailedException)

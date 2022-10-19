@@ -17,5 +17,5 @@ class FlaskClient:
                                    "Content-Type": "application/json"
                                })
 
-    def post(self, path: str, payload: Optional[Dict[str, Any]] = None):
+    def post(self, path: str, payload: Optional[Dict[str, Any]] = None) -> Any:
         return self.client.post(path, json=payload)
