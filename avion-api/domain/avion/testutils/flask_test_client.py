@@ -1,5 +1,5 @@
 from typing import Any, Dict, Optional, cast
-
+from werkzeug.test import TestResponse
 from avion.api.app import create_app
 from avion.di.container import Container
 from avion.service.account.repository.user_account_repository import UserAccountRepository
@@ -19,11 +19,13 @@ class FlaskTestClient:
         self.container.resolve(UserAccountRepository).using(UserAccountRepository,
                                                             {"database": self.db_initializer.db_path})
 
-    def get(self, path: str) -> Any:
+    def get(self, path: str) -> TestResponse:
         return self.client.get(path, follow_redirects=True,
                                headers={
                                    "Content-Type": "application/json"
                                })
 
-    def post(self, path: str, payload: Optional[Dict[str, Any]] = None) -> Any:
-        return self.client.post(path, json=payload)
+    def post(self, path: str, payload: Optional[Dict[str, Any]] = None) -> TestResponse:
+        return self.client.post(path, json=payload, headers={
+            "Content-Type": "application/json"
+        })
