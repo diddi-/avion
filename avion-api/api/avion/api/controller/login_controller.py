@@ -1,12 +1,13 @@
 from typing import cast, Dict, Any
 
-from flask import request
+from flask import request, g
 from flask_restx import Namespace, Resource, Api
 from flask_restx._http import HTTPStatus
 
 from avion.api.http_exception import HttpException
 from avion.api.input.schema.login_request_schema import LoginRequestSchema
 from avion.api.schema.login_response_schema import LoginResponseSchema
+from avion.di.container import Container
 from avion.service.account.exceptions.login_failed_exception import LoginFailedException
 from avion.service.account.model.login_request import LoginRequest
 from avion.service.account.model.login_response import LoginResponse
@@ -20,7 +21,8 @@ class LoginController(Resource):  # type: ignore
     def __init__(self, api: Api):
         super().__init__(api)
         self.api = api
-        self.user_account_service = UserAccountService()
+        self.container = cast(Container, g.get("container"))
+        self.user_account_service = self.container.get_instance(UserAccountService)
 
     @namespace.expect(LoginRequestSchema.as_namespace_model(namespace))  # type: ignore
     @namespace.response(200, "Created",
