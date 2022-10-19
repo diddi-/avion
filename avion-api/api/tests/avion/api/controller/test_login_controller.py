@@ -15,3 +15,8 @@ class TestLoginController(TestCase):
     def test_successful_login(self) -> None:
         response = self.client.post("/login", {"username": "admin", "password": "admin"})
         self.assertEqual(HTTPStatus.OK, response.status_code)
+        self.assertIn("token", response.json.keys())
+
+    def test_login_returns_BadRequest_when_invalid_payload_is_passed(self) -> None:
+        response = self.client.post("/login", {"this": "that"})
+        self.assertEqual(HTTPStatus.BAD_REQUEST, response.status_code)
