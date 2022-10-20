@@ -4,7 +4,8 @@ create table company (
     created_at text DEFAULT CURRENT_TIMESTAMP,
     name varchar(100) not null unique,
     balance int not null default 0,
-    foreign key(profile_id) references profile(id)
+    foreign key(profile_id) references profile(id),
+    unique(name)
 );
 
 create table user_account (

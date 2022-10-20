@@ -1,10 +1,11 @@
 import contextlib
 import datetime
 import sqlite3
-from sqlite3 import Row
+from sqlite3 import Row, IntegrityError
 from typing import List
 
 from avion.service.company.exceptions.company_not_found_exception import CompanyNotFoundException
+from avion.service.company.exceptions.duplicate_company_exception import DuplicateCompanyException
 from avion.service.company.model.company import Company
 from avion.service.company.model.create_company_params import CreateCompanyParams
 from avion.model.currency import Currency
@@ -19,10 +20,16 @@ class CompanyRepository:
         with contextlib.closing(sqlite3.connect(self._db)) as conn:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
-            cur.execute("INSERT INTO company (created_at, profile_id, name, balance) "
-                        "VALUES (?,?,?,?)",
-                        (created_at, profile_id, params.name, params.balance))
-            conn.commit()
+            try:
+                cur.execute("INSERT INTO company (created_at, profile_id, name, balance) "
+                            "VALUES (?,?,?,?)",
+                            (created_at, profile_id, params.name, params.balance))
+                conn.commit()
+            except IntegrityError as e:
+                if "UNIQUE constraint failed" in str(e):
+                    raise DuplicateCompanyException(params.name) from e
+                raise e
+
             company_id = cur.lastrowid
             assert company_id is not None
             company = Company(company_id, params.name)

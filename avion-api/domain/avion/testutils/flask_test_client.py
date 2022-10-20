@@ -6,6 +6,7 @@ from werkzeug.test import TestResponse
 from avion.api.app import create_app
 from avion.di.container import Container
 from avion.service.account.repository.user_account_repository import UserAccountRepository
+from avion.service.company.repository.company_repository import CompanyRepository
 from avion.service.profile.repository.profile_repository import ProfileRepository
 from avion.testutils.db_initializer import DbInitializer
 
@@ -23,6 +24,8 @@ class FlaskTestClient:
         self.container.resolve(UserAccountRepository).using(UserAccountRepository,
                                                             {"database": self.db_initializer.db_path})
         self.container.resolve(ProfileRepository).using(ProfileRepository,
+                                                        {"database": self.db_initializer.db_path})
+        self.container.resolve(CompanyRepository).using(CompanyRepository,
                                                         {"database": self.db_initializer.db_path})
         self._access_token: Optional[str] = None
         self._x_profile_id: Optional[int] = None
