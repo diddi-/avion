@@ -20,3 +20,8 @@ class DbInitializer:
                         continue
                     cur.executescript(Path(file.path).read_text())
             conn.commit()
+
+    def __del__(self) -> None:
+        # The lifetime of our temporary directory is outside control of this class as it must exist for the duration
+        # of an entire test. As such, the only way to know when to properly clean up the temp dir is in the destructor.
+        self.temp_dir.cleanup()
