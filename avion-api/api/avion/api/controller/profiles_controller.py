@@ -1,13 +1,18 @@
-from typing import cast, Dict, Any, List
+from http import HTTPStatus
+from typing import cast, Dict, Any, List, Tuple
 
-from flask import request
+from flask import request, current_app
 from flask_jwt_extended import jwt_required
 from flask_restx import Namespace, Resource, Api
+from marshmallow import ValidationError
 
+from avion.api.http_exception import HttpException
 from avion.api.input.schema.create_profile_schema import CreateProfileSchema
 from avion.api.schema.profile_schema import ProfileSchema
-from avion.service.profile.model.profile import Profile
+from avion.di.container import Container
+from avion.service.profile.exceptions.duplicate_profile_exception import DuplicateProfileException
 from avion.service.profile.model.create_profile_params import CreateProfileParams
+from avion.service.profile.model.profile import Profile
 from avion.service.profile.profile_service import ProfileService
 from avion.service.session.http_session import HttpSession
 
@@ -19,21 +24,25 @@ class ProfilesController(Resource):  # type: ignore
     def __init__(self, api: Api):
         super().__init__(api)
         self.api = api
-        self.profile_service = ProfileService()
-        self.http_session = HttpSession()
+        container = cast(Container, current_app.config["DIContainer"])
+        self.profile_service = container.get_instance(ProfileService)
+        self.http_session = container.get_instance(HttpSession)
 
     @namespace.expect(CreateProfileSchema.as_namespace_model(namespace))  # type: ignore
-    @namespace.response(200, "Created",
+    @namespace.response(201, "Created",
                         ProfileSchema.as_namespace_model(namespace))  # type: ignore
     @namespace.marshal_with(ProfileSchema.as_namespace_model(namespace))  # type: ignore
     @jwt_required()  # type: ignore
-    def post(self) -> Profile:
+    def post(self) -> Tuple[Profile, int]:
         data = cast(Dict[str, Any], request.json)
-        params = cast(CreateProfileParams, CreateProfileSchema().load(data))
-        params.owner_id = self.http_session.get_current_user().id
-        return self.profile_service.create_profile(params)
+        try:
+            params = cast(CreateProfileParams, CreateProfileSchema().load(data))
+            params.owner_id = self.http_session.get_current_user().id
+            return self.profile_service.create_profile(params), 201
+        except (ValidationError, DuplicateProfileException) as e:
+            raise HttpException(HTTPStatus.BAD_REQUEST, str(e)) from e
 
-    @namespace.response(200, "Created",
+    @namespace.response(200, "OK",
                         ProfileSchema.as_namespace_model(namespace))  # type: ignore
     @namespace.marshal_with(ProfileSchema.as_namespace_model(namespace))  # type: ignore
     @jwt_required()  # type: ignore

@@ -1,10 +1,11 @@
 import contextlib
 import datetime
 import sqlite3
-from sqlite3 import Row
+from sqlite3 import Row, IntegrityError
 from typing import List
 
 from avion.service.company.model.company_role import CompanyRole
+from avion.service.profile.exceptions.duplicate_profile_exception import DuplicateProfileException
 from avion.service.profile.model.profile import Profile
 from avion.service.profile.model.create_profile_params import CreateProfileParams
 
@@ -19,10 +20,16 @@ class ProfileRepository:
         with contextlib.closing(sqlite3.connect(self._db)) as conn:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
-            cur.execute("INSERT INTO profile (created_at, user_account_id, firstname, lastname, balance) "
-                        "VALUES (?,?,?,?,?)",
-                        (created_at, params.owner_id, params.firstname, params.lastname, params.balance))
-            conn.commit()
+            try:
+                cur.execute("INSERT INTO profile (created_at, user_account_id, firstname, lastname, balance) "
+                            "VALUES (?,?,?,?,?)",
+                            (created_at, params.owner_id, params.firstname, params.lastname, params.balance))
+                conn.commit()
+            except IntegrityError as e:
+                if "UNIQUE constraint failed" in str(e):
+                    raise DuplicateProfileException(params.firstname, params.lastname) from e
+                raise e
+
             profile_id = cur.lastrowid
             if not profile_id:
                 raise RuntimeError(f"Profile {params.firstname} {params.lastname}, owner={params.owner_id} did not "

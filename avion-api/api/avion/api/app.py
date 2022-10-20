@@ -19,6 +19,9 @@ from avion.config.config import current_config
 from avion.di.container import Container
 from avion.service.account.repository.user_account_repository import UserAccountRepository
 from avion.service.account.user_account_service import UserAccountService
+from avion.service.profile.profile_service import ProfileService
+from avion.service.profile.repository.profile_repository import ProfileRepository
+from avion.service.session.http_session import HttpSession
 
 
 def create_app() -> Flask:
@@ -38,6 +41,9 @@ def create_app() -> Flask:
     container = Container()
     container.resolve(UserAccountService).using(UserAccountService)
     container.resolve(UserAccountRepository).using(UserAccountRepository)
+    container.resolve(ProfileService).using(ProfileService)
+    container.resolve(ProfileRepository).using(ProfileRepository)
+    container.resolve(HttpSession).using(HttpSession)
     app.config["DIContainer"] = container
 
     api.add_namespace(status_namespace, "/status")

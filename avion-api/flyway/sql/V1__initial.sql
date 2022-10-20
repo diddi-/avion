@@ -26,6 +26,7 @@ create table profile (
     lastname varchar(100) not null,
     balance int not null default 0,
     foreign key(user_account_id) references user_account(id)
+    unique(user_account_id, firstname, lastname)
 );
 
 create table company_profile_role (

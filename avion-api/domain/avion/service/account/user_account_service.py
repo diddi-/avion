@@ -28,6 +28,8 @@ class UserAccountService:
         password = HashedPassword(request.password, salt)
         if not self._repository.validate_credentials(request.username, password):
             raise LoginFailedException()
+
+        # Having create_access_token here is not good. We do not want anything to do with Flask and its context here.
         return LoginResponse(create_access_token(identity=request.username))
 
     def parse_token(self, string_token: str) -> JwtAccessToken:
