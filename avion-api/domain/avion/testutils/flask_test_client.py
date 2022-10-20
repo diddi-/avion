@@ -25,6 +25,7 @@ class FlaskTestClient:
         self.container.resolve(ProfileRepository).using(ProfileRepository,
                                                         {"database": self.db_initializer.db_path})
         self._access_token: Optional[str] = None
+        self._x_profile_id: Optional[int] = None
 
     def _request_headers(self) -> Dict[str, str]:
         headers = {
@@ -32,7 +33,13 @@ class FlaskTestClient:
         }
         if self._access_token:
             headers["Authorization"] = f"Bearer {self._access_token}"
+
+        if self._x_profile_id:
+            headers["X-PROFILE-ID"] = str(self._x_profile_id)
         return headers
+
+    def switch_profile(self, profile_id: int) -> None:
+        self._x_profile_id = profile_id
 
     def login(self, username: str, password: str) -> None:
         response = self.post("/login", {"username": username, "password": password})

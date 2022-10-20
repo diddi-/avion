@@ -1,8 +1,11 @@
 from functools import wraps
-from typing import Callable, TypeVar
+from http import HTTPStatus
+from typing import Callable, TypeVar, cast
 
-from flask import request
+from flask import request, current_app
 
+from avion.api.http_exception import HttpException
+from avion.di.container import Container
 from avion.service.profile.profile_service import ProfileService
 from avion.service.session.http_session import HttpSession
 
@@ -22,17 +25,20 @@ def with_profile() -> Callable[[FunctionSpec[T]], FunctionSpec[T]]:
     def decorator(func: FunctionSpec[T]) -> FunctionSpec[T]:
         @wraps(func)
         def wrapper(*args, **kwargs) -> T:  # type: ignore
-            user = HttpSession().get_current_user()
+            container = cast(Container, current_app.config["DIContainer"])
+            http = container.get_instance(HttpSession)
+            profile_service = container.get_instance(ProfileService)
+            user = http.get_current_user()
             header_name = "X-PROFILE-ID"
             if header_name not in request.headers:
-                raise ValueError(f"Missing required {header_name}. {request.headers.keys()}")
+                raise HttpException(HTTPStatus.BAD_REQUEST, f"Missing required {header_name}. {request.headers.keys()}")
 
             profile_id = int(request.headers[header_name])
             assert user.id is not None  # Mypy..
-            if not ProfileService().account_has_profile(user.id, profile_id):
-                raise ValueError("You do not have access to this profile")
+            if not profile_service.account_has_profile(user.id, profile_id):
+                raise HttpException(HTTPStatus.UNAUTHORIZED, "You do not have access to this profile")
 
-            return func(args[0], ProfileService().get_profile(profile_id), *args[1:], **kwargs)
+            return func(args[0], profile_service.get_profile(profile_id), *args[1:], **kwargs)
 
         return wrapper
 

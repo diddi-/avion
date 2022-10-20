@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import cast, Dict
+from typing import cast, Dict, Any, List
 from unittest import TestCase
 
 from avion.service.account.model.create_user_account_params import CreateUserAccountParams
@@ -50,3 +50,26 @@ class TestProfilesController(TestCase):
         json = cast(Dict[str, str], response.json)
         self.assertEqual(HTTPStatus.BAD_REQUEST, response.status_code)
         self.assertIn("Profile already exist", json["error"])
+
+    def test_list_of_profiles_can_be_retrieved(self) -> None:
+        password = "secret"
+        user = self.account_service.register(CreateUserAccountParams("John", "Doe", "john@example.com", password))
+        self.client.login(user.username, password)
+        response = self.client.post("/profiles", {"firstname": "Captain", "lastname": "Sunglasses"})
+        profile1_data = cast(Dict[str, Any], response.json)
+        response = self.client.post("/profiles", {"firstname": "Jake", "lastname": "Peralta"})
+        profile2_data = cast(Dict[str, Any], response.json)
+
+        response = self.client.get("/profiles")
+        self.assertEqual(HTTPStatus.OK, response.status_code)
+        json = cast(List[Dict[str, Any]], response.json)
+        self.assertListEqual([profile1_data, profile2_data], json)
+
+    def test_empty_list_is_returned_when_no_profiles_exist_for_user(self) -> None:
+        password = "secret"
+        user = self.account_service.register(CreateUserAccountParams("John", "Doe", "john@example.com", password))
+        self.client.login(user.username, password)
+        response = self.client.get("/profiles")
+        profiles = cast(List[Dict[str, Any]], response.json)
+        self.assertEqual(HTTPStatus.OK, response.status_code)
+        self.assertListEqual([], profiles)
