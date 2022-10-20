@@ -1,7 +1,7 @@
 import datetime
-from sqlite3 import IntegrityError
 from unittest import TestCase
 
+from avion.service.account.exceptions.duplicate_account_exception import DuplicateAccountException
 from avion.service.account.model.create_user_account_params import CreateUserAccountParams
 from avion.service.account.model.hashed_password import HashedPassword
 from avion.service.account.repository.user_account_repository import UserAccountRepository
@@ -44,9 +44,8 @@ class TestUserAccountRepository(TestCase):
         repository = UserAccountRepository(database=self.initializer.db_path)
         repository.create(params, HashedPassword(params.password))
 
-        with self.assertRaises(IntegrityError) as err:
+        with self.assertRaises(DuplicateAccountException):
             repository.create(params, HashedPassword(params.password))
-        self.assertIn("UNIQUE constraint failed: user_account.username", str(err.exception))
 
     def test_created_at_field_is_set_when_creating_new_account(self) -> None:
         self.initializer.run()

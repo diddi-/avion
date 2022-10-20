@@ -56,8 +56,9 @@ def create_app() -> Flask:
         body = json.dumps({
             "error": e.message,
         })
-        response = app.make_response((body, e.return_code, ))
-        response.headers.add("Content-Type", "application/json")
+        response = app.make_response(body)
+        response.status_code = e.return_code
+        response.content_type = "application/json"
         return response
 
     return app

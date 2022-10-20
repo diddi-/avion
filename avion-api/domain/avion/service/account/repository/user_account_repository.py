@@ -1,9 +1,10 @@
 import contextlib
 import datetime
 import sqlite3
-from sqlite3 import Row
+from sqlite3 import Row, IntegrityError
 from typing import List
 
+from avion.service.account.exceptions.duplicate_account_exception import DuplicateAccountException
 from avion.service.account.exceptions.no_such_user_exception import NoSuchUserException
 from avion.service.account.model.create_user_account_params import CreateUserAccountParams
 from avion.service.account.model.hashed_password import HashedPassword
@@ -19,11 +20,17 @@ class UserAccountRepository:
         with contextlib.closing(sqlite3.connect(self._db)) as conn:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
-            cur.execute("INSERT INTO user_account (created_at, firstname, lastname, email, username, password, salt) "
-                        "VALUES (?,?,?,?,?,?,?)",
-                        (created_at, params.firstname, params.lastname, params.email, params.email, password.password,
-                         password.salt))
-            conn.commit()
+            try:
+                cur.execute("INSERT INTO user_account (created_at, firstname, lastname, email, username, password,"
+                            " salt) VALUES (?,?,?,?,?,?,?)",
+                            (created_at, params.firstname, params.lastname, params.email, params.email,
+                             password.password, password.salt))
+                conn.commit()
+            except IntegrityError as e:
+                if "UNIQUE constraint failed: user_account.username" in str(e):
+                    raise DuplicateAccountException(params.email) from e
+                raise e
+
             user_id = cur.lastrowid
             if not user_id:
                 raise RuntimeError(f"User Account {params.email} did not receive a row ID!")
