@@ -18,6 +18,7 @@ import { ProfileSelectorComponent } from './view-components/profile/profile-sele
 import { CreateCompanyComponent } from './view-components/company/create-company/create-company.component';
 import { httpInterceptorProviders } from "@app/interceptors";
 import { DetailedProfileViewComponent } from './view-components/profile/detailed-profile-view/detailed-profile-view.component';
+import { RegisterComponent } from './view-components/register/register.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { DetailedProfileViewComponent } from './view-components/profile/detailed
     ProfileSelectorComponent,
     CreateCompanyComponent,
     DetailedProfileViewComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,
