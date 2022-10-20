@@ -23,8 +23,8 @@ class Container:
         args = []
         kwargs = {}
         for param_name, param in sig.parameters.items():
-            if param.annotation in self._providers.keys():
-                if param.kind == param.POSITIONAL_OR_KEYWORD or param.kind == param.POSITIONAL_ONLY:
+            if param.annotation in self._providers:
+                if param.kind in (param.POSITIONAL_OR_KEYWORD, param.POSITIONAL_ONLY):
                     args.append(self.get_instance(param.annotation))
                 else:
                     kwargs[param_name] = self.get_instance(param.annotation)

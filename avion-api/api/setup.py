@@ -21,7 +21,8 @@ setuptools.setup(
     ],
     extras_require={
         "test": [
-            "mockito"
+            "mockito",
+            "pylint>=2.15.4"
         ]  # Dependencies for testing go here
     },
     classifiers=[

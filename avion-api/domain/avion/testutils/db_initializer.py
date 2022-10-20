@@ -18,7 +18,7 @@ class DbInitializer:
                 if file.is_file():
                     if "seed" in file.name and not include_seeds:
                         continue
-                    cur.executescript(Path(file.path).read_text())
+                    cur.executescript(Path(file.path).read_text(encoding="utf-8"))
             conn.commit()
 
     def __del__(self) -> None:

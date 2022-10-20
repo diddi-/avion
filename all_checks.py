@@ -8,13 +8,13 @@ def parse_args() -> argparse.Namespace:
 
 def main():
     args = parse_args()
-    if args.check == "lint" or args.check == "all":
+    if args.check in ("lint", "all"):
         print("##### PYLINT #####")
-        system("pylint avion-api/*/*/*")
-    if args.check == "mypy" or args.check == "all":
+        system("pylint avion-api/ all_checks.py")
+    if args.check in ("mypy", "all"):
         print("##### MYPY #####")
         system("mypy .")
-    if args.check == "unit" or args.check == "all":
+    if args.check in ("unit", "all"):
         print("##### UNIT TEST #####")
         system("pytest")
 

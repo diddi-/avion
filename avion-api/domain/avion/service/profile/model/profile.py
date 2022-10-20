@@ -18,7 +18,7 @@ class Profile:
 
     def has_company_role(self, company_id: int, roles: List[CompanyRole]) -> bool:
         """ Returns True if the Profile has at least one of the supplied roles. """
-        if company_id not in self._company_roles.keys():
+        if company_id not in self._company_roles:
             return False
         for role in roles:
             if role in self._company_roles[company_id]:
@@ -26,7 +26,7 @@ class Profile:
         return False
 
     def add_company_role(self, company_id: int, role: CompanyRole) -> None:
-        if company_id not in self._company_roles.keys():
+        if company_id not in self._company_roles:
             self._company_roles[company_id] = []
         self._company_roles[company_id].append(role)
 
