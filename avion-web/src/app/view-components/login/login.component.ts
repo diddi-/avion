@@ -1,18 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import {AuthService} from "../../services/auth/auth.service";
-import {Router} from "@angular/router";
+import {Component, OnInit} from '@angular/core';
+import {AuthService} from "@app/services/auth/auth.service";
+import {ActivatedRoute, Router} from "@angular/router";
 import {UntypedFormGroup} from "@angular/forms";
 import {FormlyFieldConfig} from "@ngx-formly/core";
-import {LoginResponse} from "../../services/auth/login-response";
-import {LoginCredentials} from "../../services/auth/login-credentials";
-import { ActivatedRoute } from '@angular/router';
+import {LoginCredentials} from "@app/services/auth/login-credentials";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit{
+export class LoginComponent implements OnInit {
   loading = false;
   returnUrl: string | undefined = undefined;
   form = new UntypedFormGroup({});

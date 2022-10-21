@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormlyFieldConfig} from "@ngx-formly/core";
 import {UntypedFormGroup} from "@angular/forms";
-import { ProfileService } from '../../../services/profile/profile.service';
-import { CreateProfileParams } from '../../../services/profile/model/create-profile-params';
+import {ProfileService} from '@app/services/profile/profile.service';
+import {CreateProfileParams} from '@app/services/profile/model/create-profile-params';
 import {Router} from "@angular/router";
 
 @Component({
@@ -32,14 +32,16 @@ export class CreateProfileComponent implements OnInit {
       }
     },
   ]
+
   constructor(private profileService: ProfileService,
-              private router: Router) { }
+              private router: Router) {
+  }
 
   ngOnInit(): void {
   }
 
   public onSubmit() {
     this.profileService.createProfile(<CreateProfileParams>this.model);
-    this.router.navigate(["home"]);
+    this.router.navigate(["home"]).then();
   }
 }
