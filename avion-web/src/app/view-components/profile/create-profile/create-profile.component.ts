@@ -3,6 +3,7 @@ import {FormlyFieldConfig} from "@ngx-formly/core";
 import {UntypedFormGroup} from "@angular/forms";
 import { ProfileService } from '../../../services/profile/profile.service';
 import { CreateProfileParams } from '../../../services/profile/model/create-profile-params';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-create-profile',
@@ -31,12 +32,14 @@ export class CreateProfileComponent implements OnInit {
       }
     },
   ]
-  constructor(private profileService: ProfileService) { }
+  constructor(private profileService: ProfileService,
+              private router: Router) { }
 
   ngOnInit(): void {
   }
 
   public onSubmit() {
     this.profileService.createProfile(<CreateProfileParams>this.model);
+    this.router.navigate(["home"]);
   }
 }
