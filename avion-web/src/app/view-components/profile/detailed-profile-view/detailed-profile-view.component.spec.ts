@@ -1,14 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DetailedProfileViewComponent } from './detailed-profile-view.component';
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
-describe('DetailedViewComponent', () => {
+describe('DetailedProfileViewComponent', () => {
   let component: DetailedProfileViewComponent;
   let fixture: ComponentFixture<DetailedProfileViewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DetailedProfileViewComponent ]
+      declarations: [ DetailedProfileViewComponent ],
+      imports: [HttpClientTestingModule]
     })
     .compileComponents();
 

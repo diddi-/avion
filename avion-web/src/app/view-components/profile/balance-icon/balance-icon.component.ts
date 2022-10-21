@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ProfileService } from "@app/services/profile/profile.service";
+import {Component, OnInit} from '@angular/core';
+import {ProfileService} from "@app/services/profile/profile.service";
 
 @Component({
   selector: 'app-balance-icon',

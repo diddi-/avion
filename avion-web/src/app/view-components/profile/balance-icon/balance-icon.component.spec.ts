@@ -59,10 +59,22 @@ describe('BalanceIconComponent', () => {
 
   it("should read current profile balance on init", () => {
     const expected_balance = 50000;
-    if(profileService.currentProfile?.balance !== undefined) // TS2779
+    if (profileService.currentProfile?.balance !== undefined) // TS2779
       profileService.currentProfile.balance = expected_balance;
     expect(component.balance).toBe(0);
     component.ngOnInit();
     expect(component.balance).toBe(expected_balance);
-  })
+  });
+
+  it("should should display balance with a money icon", () => {
+    const expected_balance = 50000;
+    component.balance = expected_balance;
+    fixture.detectChanges();
+    const html: HTMLElement = fixture.nativeElement;
+    const icon = html.querySelector("div mat-icon");
+    const value = html.querySelector("div span");
+
+    expect(icon?.textContent).toBe("attach_money");
+    expect(value?.textContent).toBe(expected_balance.toString());
+  });
 });
