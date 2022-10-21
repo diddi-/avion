@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { retry } from 'rxjs/operators';
-import { Observable, Subject } from 'rxjs';
-import { CreateProfileParams } from './model/create-profile-params';
-import { Profile } from './model/profile';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {retry} from 'rxjs/operators';
+import {Observable, Subject} from 'rxjs';
+import {CreateProfileParams} from './model/create-profile-params';
+import {Profile} from './model/profile';
 
 @Injectable({
   providedIn: 'root'
@@ -24,11 +24,11 @@ export class ProfileService {
 
   private onProfilesListUpdate(): void {
     const profileId = this.getCurrentProfileId();
-    if(!profileId)
+    if (!profileId)
       return;
 
     this.profilesList.forEach(p => {
-      if(p.id === profileId)
+      if (p.id === profileId)
         this.switchProfile(p);
     })
   }
@@ -41,7 +41,7 @@ export class ProfileService {
 
   public getCurrentProfileId(): number {
     const profileId = localStorage.getItem("currentProfileId");
-    if(!profileId && !this.profilesList)
+    if (!profileId && !this.profilesList)
       throw new Error("No current profile selected");
 
     return profileId ? parseInt(profileId) : this.profilesList[0].id;
@@ -59,6 +59,14 @@ export class ProfileService {
     localStorage.setItem("currentProfileId", profile.id.toString());
     this.currentProfile = profile;
     this.profileSwitched$.next(profile);
+  }
+
+  public updateCurrentProfileData(): void {
+    this.getDetailedProfile().subscribe((p: Profile) => {
+        this.currentProfile = p;
+        this.profileSwitched$.next(p);
+      }
+    )
   }
 
   public getDetailedProfile(): Observable<Profile> {
