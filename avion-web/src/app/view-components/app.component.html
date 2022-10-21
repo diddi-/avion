@@ -3,23 +3,7 @@
     <div>
       <a id="title" routerLink="/">{{ title }}</a>
     </div>
-
-    <div>
-      <button mat-button class="menu-button" [matMenuTriggerFor]="menu">
-        <mat-icon>person</mat-icon> {{authService.username}}
-      </button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item>
-          <mat-icon>settings</mat-icon>
-          <span>Settings</span>
-        </button>
-        <button mat-menu-item (click)="authService.logout()">
-          <mat-icon>logout</mat-icon>
-          <span>Log out</span>
-        </button>
-      </mat-menu>
-    </div>
-
+        <app-profile-selector></app-profile-selector>
   </header>
 
   <mat-sidenav-container class="sidenav-container">
@@ -44,7 +28,22 @@
 
       <div class="profile-area">
         <mat-divider></mat-divider>
-        <app-profile-selector></app-profile-selector>
+        <mat-nav-list>
+          <button mat-list-item class="menu-button" [matMenuTriggerFor]="menu">
+            <mat-icon mat-list-icon>person</mat-icon>
+            <p matLine>{{authService.username}}</p>
+          </button>
+        </mat-nav-list>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item>
+              <mat-icon>settings</mat-icon>
+              <span>Settings</span>
+            </button>
+            <button mat-menu-item (click)="authService.logout()">
+              <mat-icon>logout</mat-icon>
+              <span>Log out</span>
+            </button>
+          </mat-menu>
       </div>
     </mat-sidenav>
     <mat-sidenav-content>
