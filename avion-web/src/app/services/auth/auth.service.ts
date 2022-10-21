@@ -13,24 +13,26 @@ import { authLoginOptions } from './auth-login-options';
 import { TokenStorageService } from '../token/token-storage.service';
 import { CreateAccountParams } from "@app/services/auth/create-account-params";
 import { RegistrationResponse } from "@app/services/auth/registration-response";
+import { JwtToken } from "@app/services/token/jwt-token";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   public isLoggedIn: boolean = false;
-  public username: string | null = 'admin';
-  public token: string | null = null;
+  public username: string | undefined = 'admin';
   redirectUrl: string | null = null;
+
+  private token: JwtToken | undefined = undefined;
 
   constructor(private router: Router, private http: HttpClient,
               private tokenStorage: TokenStorageService) {
 
-    if(this.tokenStorage.hasAccessToken())
+    if(this.tokenStorage.hasAccessToken()) {
       this.isLoggedIn = true;
-
-    if(localStorage.getItem("username"))
-      this.username = localStorage.getItem("username");
+      this.token = JwtToken.fromString(this.tokenStorage.getAccessToken());
+      this.username = this.token.getUsername();
+    }
   }
 
   private handleRegistrationError(error: HttpErrorResponse) {
@@ -72,15 +74,13 @@ export class AuthService {
   private handleLogin(data: LoginResponse, onSuccessCb: () => void): void {
     this.tokenStorage.saveAccessToken(data.token);
     this.isLoggedIn = true;
+    this.token = JwtToken.fromString(data.token);
+    this.username = this.token.getUsername();
     if (onSuccessCb)
       onSuccessCb();
   }
 
   public login(credentials: LoginCredentials, opts: authLoginOptions) {
-    // Username should actually be set in handleLogin(), no?
-    this.username = credentials.username;
-    localStorage.setItem("username", credentials.username);
-
     return this.http.post<LoginResponse>("/api/login", credentials)
       .pipe(retry({count: 3, delay: 1000}), catchError(this.handleError))
       .subscribe({
@@ -96,8 +96,8 @@ export class AuthService {
 
   public logout(): void {
     this.isLoggedIn = false;
-    this.username = null;
-    localStorage.removeItem("username")
+    this.username = undefined;
+    this.token = undefined;
     this.tokenStorage.clearAllTokens();
     this.router.navigate(['login']).then();
   }
