@@ -5,6 +5,7 @@ import {UntypedFormGroup} from "@angular/forms";
 import {FormlyFieldConfig} from "@ngx-formly/core";
 import {LoginResponse} from "../../services/auth/login-response";
 import {LoginCredentials} from "../../services/auth/login-credentials";
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,7 @@ import {LoginCredentials} from "../../services/auth/login-credentials";
 })
 export class LoginComponent implements OnInit{
   loading = false;
-
+  returnUrl: string | undefined = undefined;
   form = new UntypedFormGroup({});
   model = {};
   fields: FormlyFieldConfig[] = [
@@ -37,13 +38,19 @@ export class LoginComponent implements OnInit{
 
   errorMsg: string | null = null;
 
-  constructor(public authService: AuthService, public router: Router) {
+  constructor(public authService: AuthService, public router: Router,
+              private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
-    if (this.authService.isLoggedIn) {
+    if (this.authService.isLoggedIn()) {
       this.router.navigate(['home']).then()
     }
+
+    this.route.queryParams.subscribe(params => {
+      if ("returnUrl" in params)
+        this.returnUrl = params["returnUrl"];
+    });
   }
 
   onLoginError(err: Error): void {
@@ -53,7 +60,8 @@ export class LoginComponent implements OnInit{
 
   onLoginSuccess(): void {
     this.loading = false;
-    this.router.navigate(['home']).then(() => location.reload());
+    const returnUrl = this.returnUrl ? this.returnUrl : "home";
+    this.router.navigate([returnUrl]).then(() => location.reload());
   }
 
   login() {

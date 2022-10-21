@@ -1,4 +1,4 @@
-<div class="page-container" *ngIf="authService.isLoggedIn">
+<div class="page-container" *ngIf="authService.isLoggedIn()">
   <header>
     <div>
       <a id="title" routerLink="/">{{ title }}</a>
@@ -55,6 +55,6 @@
   </mat-sidenav-container>
 </div>
 
-<div *ngIf="!authService.isLoggedIn">
+<div *ngIf="!authService.isLoggedIn()">
   <router-outlet></router-outlet>
 </div>

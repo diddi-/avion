@@ -11,7 +11,7 @@ export class JwtToken {
   }
 
   public isExpired(): boolean {
-    return this.payload.exp < new Date().getTime();
+    return this.payload.exp < (new Date().getTime() / 1000); /* Date() uses milliseconds */
   }
 
   public getUsername(): string | undefined {

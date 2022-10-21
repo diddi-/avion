@@ -19,7 +19,6 @@ import { JwtToken } from "@app/services/token/jwt-token";
   providedIn: 'root'
 })
 export class AuthService {
-  public isLoggedIn: boolean = false;
   public username: string | undefined = 'admin';
   redirectUrl: string | null = null;
 
@@ -29,10 +28,15 @@ export class AuthService {
               private tokenStorage: TokenStorageService) {
 
     if(this.tokenStorage.hasAccessToken()) {
-      this.isLoggedIn = true;
       this.token = JwtToken.fromString(this.tokenStorage.getAccessToken());
       this.username = this.token.getUsername();
     }
+  }
+
+  public isLoggedIn() {
+    if(this.token === undefined)
+      return false;
+    return !this.token?.isExpired();
   }
 
   private handleRegistrationError(error: HttpErrorResponse) {
@@ -73,7 +77,6 @@ export class AuthService {
 
   private handleLogin(data: LoginResponse, onSuccessCb: () => void): void {
     this.tokenStorage.saveAccessToken(data.token);
-    this.isLoggedIn = true;
     this.token = JwtToken.fromString(data.token);
     this.username = this.token.getUsername();
     if (onSuccessCb)
@@ -95,7 +98,6 @@ export class AuthService {
   }
 
   public logout(): void {
-    this.isLoggedIn = false;
     this.username = undefined;
     this.token = undefined;
     this.tokenStorage.clearAllTokens();

@@ -6,10 +6,12 @@ import { CreateProfileComponent } from './view-components/profile/create-profile
 import { CreateCompanyComponent } from '@app/view-components/company/create-company/create-company.component';
 import { DetailedProfileViewComponent } from "@app/view-components/profile/detailed-profile-view/detailed-profile-view.component";
 import { RegisterComponent } from "@app/view-components/register/register.component";
+import { AuthGuard } from "@app/guards/auth.guard";
 
 const routes: Routes = [
   {
     path: '',
+    canActivate: [AuthGuard],
     children: [
       {path: '', redirectTo: 'home', pathMatch: 'full'},
       {path: 'home', component: HomeComponent},

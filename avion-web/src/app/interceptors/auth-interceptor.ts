@@ -17,7 +17,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler):
     Observable<HttpEvent<any>> {
-    if(this.authService.isLoggedIn) {
+    if(this.authService.isLoggedIn()) {
       try {
         const authToken = this.tokenStorage.getAccessToken();
         const authReq = req.clone({

@@ -37,10 +37,10 @@ export class ProfileService {
 
   public getCurrentProfileId(): number {
     const profileId = localStorage.getItem("currentProfileId");
-    if(!profileId)
+    if(!profileId && !this.profilesList)
       throw new Error("No current profile selected");
 
-    return parseInt(profileId);
+    return profileId ? parseInt(profileId) : this.profilesList[0].id;
   }
 
   public updateProfilesList(): void {
