@@ -8,6 +8,7 @@ from marshmallow import ValidationError
 
 from avion.api.http_exception import HttpException
 from avion.api.input.schema.create_profile_schema import CreateProfileSchema
+from avion.api.schema.private_profile_schema import PrivateProfileSchema
 from avion.api.schema.profile_schema import ProfileSchema
 from avion.di.container import Container
 from avion.service.profile.exceptions.duplicate_profile_exception import DuplicateProfileException
@@ -43,8 +44,8 @@ class ProfilesController(Resource):  # type: ignore
             raise HttpException(HTTPStatus.BAD_REQUEST, str(e)) from e
 
     @namespace.response(200, "OK",
-                        ProfileSchema.as_namespace_model(namespace))  # type: ignore
-    @namespace.marshal_with(ProfileSchema.as_namespace_model(namespace))  # type: ignore
+                        PrivateProfileSchema.as_namespace_model(namespace))  # type: ignore
+    @namespace.marshal_with(PrivateProfileSchema.as_namespace_model(namespace))  # type: ignore
     @jwt_required()  # type: ignore
     def get(self) -> List[Profile]:
         return self.profile_service.get_profiles(self.http_session.get_current_user().id)

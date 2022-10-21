@@ -19,6 +19,7 @@ import { CreateCompanyComponent } from './view-components/company/create-company
 import { httpInterceptorProviders } from "@app/interceptors";
 import { DetailedProfileViewComponent } from './view-components/profile/detailed-profile-view/detailed-profile-view.component';
 import { RegisterComponent } from './view-components/register/register.component';
+import { BalanceIconComponent } from './view-components/profile/balance-icon/balance-icon.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { RegisterComponent } from './view-components/register/register.component
     CreateCompanyComponent,
     DetailedProfileViewComponent,
     RegisterComponent,
+    BalanceIconComponent,
   ],
   imports: [
     BrowserModule,
