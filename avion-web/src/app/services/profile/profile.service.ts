@@ -16,6 +16,10 @@ export class ProfileService {
   public profilesList: Profile[] = [];
 
   constructor(private http: HttpClient) {
+    // Logging out and then back in again with a different account doesn't clear the previous currentProfileId.
+    // We clear it now so that when the user log back in we don't try to load some garbage profile left in storage.
+    // Unfortunately this will also clear the profile selection on browser reload - not great.
+    localStorage.removeItem("currentProfileId");
   }
 
   private onProfilesListUpdate(): void {
