@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormlyFieldConfig} from "@ngx-formly/core";
 import {UntypedFormGroup} from "@angular/forms";
 import {CompanyService} from "@app/services/company/company.service";
 import {CreateCompanyParams} from "@app/services/company/model/create-company-params";
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-create-company',
@@ -23,12 +24,16 @@ export class CreateCompanyComponent implements OnInit {
       }
     },
   ]
-  constructor(private companyService: CompanyService) { }
+
+  constructor(private companyService: CompanyService,
+              private router: Router) {
+  }
 
   ngOnInit(): void {
   }
 
   public onSubmit() {
     this.companyService.createCompany(<CreateCompanyParams>this.model);
+    this.router.navigate(["home"]).then();
   }
 }
