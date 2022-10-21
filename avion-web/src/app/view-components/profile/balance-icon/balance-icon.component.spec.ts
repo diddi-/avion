@@ -6,6 +6,7 @@ import {MaterialModule} from "@app/material.module";
 import {Subject} from "rxjs";
 import {Profile} from "@app/services/profile/model/profile";
 import {ProfileService} from "@app/services/profile/profile.service";
+import {AppModule} from "@app/app.module";
 
 class MockProfileService {
   profileSwitched$ = new Subject<Profile>();
@@ -25,7 +26,7 @@ describe('BalanceIconComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, MaterialModule],
+      imports: [HttpClientTestingModule, AppModule],
       declarations: [BalanceIconComponent],
       providers: [
         BalanceIconComponent,

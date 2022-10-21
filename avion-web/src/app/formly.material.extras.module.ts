@@ -4,10 +4,11 @@
  *
  * To optimize your production builds, you should only import the components used in your app.
  */
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 import {FormlyMatDatepickerModule} from "@ngx-formly/material/datepicker";
 import {FormlyMatToggleModule} from "@ngx-formly/material/toggle";
 import {FormlyMatSliderModule} from "@ngx-formly/material/slider";
+
 @NgModule({
   exports: [
     FormlyMatDatepickerModule,  // 'datepicker'

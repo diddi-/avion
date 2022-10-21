@@ -18,7 +18,7 @@ export class DetailedProfileViewComponent implements OnInit {
       type: 'input',
       focus: true,
       templateOptions: {
-      readonly: true,
+        readonly: true,
         label: 'First name',
       }
     },
