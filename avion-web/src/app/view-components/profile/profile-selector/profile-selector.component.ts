@@ -18,9 +18,8 @@ export class ProfileSelectorComponent implements OnInit {
   }
 
   public hasProfileSelected(): boolean {
-    if(this.currentProfile !== undefined)
-      return true;
-    return false;
+    return this.profileService.currentProfile !== undefined;
+
   }
 
   public getCurrentProfileName(): string {

@@ -2,7 +2,7 @@
     <mat-icon>person_add</mat-icon>
     <span> New Profile</span>
   </a>
-  <button mat-button [matMenuTriggerFor]="aboveMenu" *ngIf="hasProfileSelected()">
+  <button mat-button id="selected-profile" [matMenuTriggerFor]="aboveMenu" *ngIf="hasProfileSelected()">
       <mat-icon>account_circle</mat-icon>
         <span> {{ getCurrentProfileName() }}</span>
   </button>

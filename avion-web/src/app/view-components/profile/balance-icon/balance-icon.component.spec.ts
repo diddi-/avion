@@ -2,7 +2,6 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {BalanceIconComponent} from './balance-icon.component';
 import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {MaterialModule} from "@app/material.module";
 import {Subject} from "rxjs";
 import {Profile} from "@app/services/profile/model/profile";
 import {ProfileService} from "@app/services/profile/profile.service";
