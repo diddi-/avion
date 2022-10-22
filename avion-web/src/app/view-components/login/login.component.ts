@@ -29,7 +29,8 @@ export class LoginComponent implements OnInit {
       type: 'input',
       templateOptions: {
         label: 'Password',
-        required: true
+        required: true,
+        type: "password",
       }
     },
   ];
