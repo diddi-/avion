@@ -36,7 +36,10 @@ export class ProfileService {
   public createProfile(params: CreateProfileParams): void {
     this.http.post<Profile>("/api/profiles", params)
       .pipe(retry({count: 3, delay: 1000}))
-      .subscribe((p) => this.switchProfile(p));
+      .subscribe((p) => {
+        this.switchProfile(p);
+        this.updateProfilesList();
+      });
   }
 
   public getCurrentProfileId(): number {
