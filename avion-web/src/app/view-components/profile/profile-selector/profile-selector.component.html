@@ -1,23 +1,24 @@
-  <a mat-button routerLink="/profile/new" *ngIf="!hasProfileSelected()">
-    <mat-icon>person_add</mat-icon>
-    <span> New Profile</span>
+  <a mat-button id="new-profile-button" routerLink="/profile/new" *ngIf="!hasProfileSelected()">
+      <mat-icon>person_add</mat-icon>
+      <span id="new-profile-text"> New Profile</span>
   </a>
   <button mat-button id="selected-profile" [matMenuTriggerFor]="aboveMenu" *ngIf="hasProfileSelected()">
-      <mat-icon>account_circle</mat-icon>
-        <span> {{ getCurrentProfileName() }}</span>
+    <mat-icon>account_circle</mat-icon>
+    <span id="profile-name-text"> {{ getCurrentProfileName() }}</span>
   </button>
 <mat-menu #aboveMenu="matMenu" class="profile-selector-menu" yPosition="above">
-  <button mat-menu-item *ngFor="let profile of getProfileSelectionList()" (click)="profileService.switchProfile(profile)">
+  <button mat-menu-item *ngFor="let profile of getProfileSelectionList()"
+          (click)="profileService.switchProfile(profile)">
     <mat-icon mat-list-icon>account_circle</mat-icon>
-       <span>{{ profile.firstname }} {{ profile.lastname }}</span>
+    <span>{{ profile.firstname }} {{ profile.lastname }}</span>
   </button>
   <mat-divider></mat-divider>
-  <a mat-menu-item routerLink="/profile/new" >
+  <a mat-menu-item routerLink="/profile/new">
     <mat-icon mat-list-icon>person_add</mat-icon>
-     <span>New Profile</span>
+    <span>New Profile</span>
   </a>
-  <a mat-menu-item routerLink="/profile" >
+  <a mat-menu-item routerLink="/profile">
     <mat-icon mat-list-icon>settings</mat-icon>
-     <span>Settings</span>
+    <span>Settings</span>
   </a>
 </mat-menu>
