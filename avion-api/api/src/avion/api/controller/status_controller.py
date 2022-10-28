@@ -7,4 +7,4 @@ class StatusController(Controller):
 
     @Route()
     def get(self) -> ControllerResult:
-        return ControllerResult("I'm OK!")
+        return ControllerResult("{'status': 'ok'}")

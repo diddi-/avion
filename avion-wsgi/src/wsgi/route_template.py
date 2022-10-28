@@ -1,10 +1,11 @@
 from __future__ import annotations
-from typing import Any, Hashable, Generator, Iterator
+
+from typing import Any, Iterator
 
 
 class RouteTemplate:
     def __init__(self, path: str):
-        self._raw_path = path
+        self._raw_path = path.removesuffix("/")
 
     def __getitem__(self, index: int) -> str:
         if self._raw_path.startswith("/"):
