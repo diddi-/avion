@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Any
+from typing import Any, Hashable, Generator, Iterator
 
 
 class RouteTemplate:
@@ -12,7 +12,7 @@ class RouteTemplate:
 
         return self._raw_path.split("/")[index]
 
-    def __next__(self):
+    def __next__(self) -> Iterator[str]:
         index = 0
         yield self[index]
         index += 1
@@ -29,7 +29,7 @@ class RouteTemplate:
     def __len__(self) -> int:
         return len(self._raw_path)
 
-    def __hash__(self) -> hash:
+    def __hash__(self) -> int:
         return hash(self._raw_path)
 
     def strip(self, other: RouteTemplate) -> RouteTemplate:

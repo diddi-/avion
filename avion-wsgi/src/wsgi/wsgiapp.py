@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Iterator, Dict, Any
 from wsgiref.simple_server import make_server
 
 from wsgi.http_context import HttpContext
@@ -10,10 +10,13 @@ from wsgi.route_template import RouteTemplate
 
 
 class WsgiApplication:
-    def __init__(self):
+    def __init__(self) -> None:
         self._middlewares: List[Middleware] = []
 
-    def __call__(self, environ, start_response):
+    # start_response from wsgi spec is very strange. There is no annotations for it and no type hinting on earth will
+    # satisfy mypy. We could import wsgiref.type.StartResponse which will make mypy happy but that fails at runtime
+    # because wsgiref.type is not available then... This will be ignored for now.
+    def __call__(self, environ: Dict[str, Any], start_response) -> Iterator[bytes]:  # type: ignore
         request = HttpRequest(RouteTemplate(environ["PATH_INFO"]), HttpMethod(environ["REQUEST_METHOD"]))
         context = HttpContext(request)
         # EndpointMiddleware *must* be the last one, so we're adding it here.
@@ -25,7 +28,7 @@ class WsgiApplication:
                        context.response.headers.as_wsgi())
         yield context.response.body.encode("utf-8")
 
-    def add_middleware(self, middleware: Middleware):
+    def add_middleware(self, middleware: Middleware) -> None:
         if self._middlewares:
             previous = self._middlewares[-1]
             previous.next_middleware = middleware

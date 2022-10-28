@@ -12,7 +12,7 @@ from avion.api.controller.jwt_test_controller import namespace as jwt_test_names
 from avion.api.controller.login_controller import namespace as login_namespace
 from avion.api.controller.profile_controller import namespace as profile_namespace
 from avion.api.controller.profiles_controller import namespace as profiles_namespace
-from avion.api.controller.status_controller import namespace as status_namespace
+from avion.api.controller.status_controller import StatusController
 from avion.api.controller.user_account_controller import namespace as account_namespace
 from avion.api.http_exception import HttpException
 from avion.config.config import current_config
@@ -24,6 +24,8 @@ from avion.service.company.repository.company_repository import CompanyRepositor
 from avion.service.profile.profile_service import ProfileService
 from avion.service.profile.repository.profile_repository import ProfileRepository
 from avion.service.session.http_session import HttpSession
+from wsgi.middleware.router.router import Router
+from wsgi.wsgiapp import WsgiApplication
 
 
 def create_app() -> Flask:
@@ -50,7 +52,6 @@ def create_app() -> Flask:
     container.resolve(CompanyRepository).using(CompanyRepository)
     app.config["DIContainer"] = container
 
-    api.add_namespace(status_namespace, "/status")
     api.add_namespace(company_namespace, "/company")
     api.add_namespace(company_name_namespace, "/company")
     api.add_namespace(account_namespace, "/account")
@@ -72,3 +73,14 @@ def create_app() -> Flask:
         return response
 
     return app
+
+def setup_wsgi_app() -> WsgiApplication:
+    app = WsgiApplication()
+    router = Router()
+    router.add_controller("/status", StatusController)
+    app.add_middleware(router)
+
+    return app
+
+app = setup_wsgi_app()
+app.run_develop()

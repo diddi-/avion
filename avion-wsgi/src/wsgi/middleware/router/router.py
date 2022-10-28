@@ -10,7 +10,7 @@ from wsgi.route_template import RouteTemplate
 
 
 class Router(Middleware):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self._endpoints: Dict[RouteTemplate, Endpoint] = {}
 

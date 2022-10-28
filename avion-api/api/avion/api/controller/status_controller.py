@@ -1,15 +1,10 @@
-from typing import Dict
-
-from flask_restx import Resource, Api, Namespace
-
-namespace = Namespace("status")
+from wsgi.controller.controller import Controller
+from wsgi.controller.controller_result import ControllerResult
+from wsgi.middleware.router.route import Route
 
 
-@namespace.route("/")
-class StatusController(Resource):  # type: ignore
-    def __init__(self, api: Api):
-        super().__init__(api)
-        self.api = api
+class StatusController(Controller):
 
-    def get(self) -> Dict[str, str]:
-        return {"status": "OK"}
+    @Route()
+    def get(self) -> ControllerResult:
+        return ControllerResult("I'm OK!")
