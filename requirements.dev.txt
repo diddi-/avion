@@ -1,5 +1,4 @@
 -e avion-wsgi[test]
--e avion-api/domain[test]
--e avion-api/api[test]
+-e avion-api[test]
 
 mypy

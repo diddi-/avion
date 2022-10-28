@@ -1,0 +1,46 @@
+import unittest
+from unittest import TestCase
+
+from avion.domain.service.account.exceptions.login_failed_exception import LoginFailedException
+from avion.domain.service.account.model.create_user_account_params import CreateUserAccountParams
+from avion.domain.service.account.model.hashed_password import HashedPassword
+from avion.domain.service.account.model.jwt_access_token import JwtAccessToken
+from avion.domain.service.account.model.login_request import LoginRequest
+from avion.domain.service.account.model.user_account import UserAccount
+from avion.domain.service.account.user_account_service import UserAccountService
+from mockito import when, mock, ANY
+
+
+class TestUserAccountService(TestCase):
+
+    def setUp(self) -> None:
+        self.stubbed_repo = mock()
+        self.tested_service = UserAccountService(repository=self.stubbed_repo)
+
+    def test_user_account_is_returned_after_registration(self) -> None:
+        params = CreateUserAccountParams("John", "Doe", "john@example.com", "secret")
+        expected_account = UserAccount(1, params.firstname, params.lastname, params.email, params.email)
+        when(self.stubbed_repo).create(params, ANY(HashedPassword)).thenReturn(expected_account)
+        actual_account = self.tested_service.register(params)
+        self.assertEqual(expected_account, actual_account)
+
+    def test_exception_is_raised_when_login_fails(self) -> None:
+        request = LoginRequest("john@example.com", "secret")
+        password = HashedPassword(request.password)
+        when(self.stubbed_repo).get_salt(request.username).thenReturn(password.salt)
+        when(self.stubbed_repo).validate_credentials(request.username, password).thenReturn(False)
+
+        with self.assertRaises(LoginFailedException):
+            self.tested_service.login(request)
+
+    @unittest.skip("Access token generation needs an active Flask context. Requires refactor.")
+    def test_login_response_with_access_token_is_returned_on_successful_login(self) -> None:
+        request = LoginRequest("john@example.com", "secret")
+        password = HashedPassword(request.password)
+        when(self.stubbed_repo).get_salt(request.username).thenReturn(password.salt)
+        when(self.stubbed_repo).validate_credentials(request.username, password).thenReturn(True)
+
+        expected_token = JwtAccessToken()
+        expected_token.sub = "john@example.com"
+        response = self.tested_service.login(request)
+        self.assertEqual(expected_token.sub, JwtAccessToken.from_string(response.token).sub)
