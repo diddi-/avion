@@ -83,4 +83,4 @@ def setup_wsgi_app() -> WsgiApplication:
     return app
 
 app = setup_wsgi_app()
-app.run_develop()
+#app.run_develop()
