@@ -15,24 +15,15 @@ from avion.api.controller.profiles_controller import namespace as profiles_names
 from avion.api.controller.status_controller import StatusController
 from avion.api.controller.user_account_controller import namespace as account_namespace
 from avion.api.http_exception import HttpException
-
 from avion.domain.config.config import current_config
-
 from avion.domain.di.container import Container
-
-from avion.domain.service.account.user_account_service import UserAccountService
-
 from avion.domain.service.account.repository.user_account_repository import UserAccountRepository
-
-from avion.domain.service.profile.profile_service import ProfileService
-
-from avion.domain.service.profile.repository.profile_repository import ProfileRepository
-
-from avion.domain.service.session.http_session import HttpSession
-
+from avion.domain.service.account.user_account_service import UserAccountService
 from avion.domain.service.company.company_service import CompanyService
-
 from avion.domain.service.company.repository.company_repository import CompanyRepository
+from avion.domain.service.profile.profile_service import ProfileService
+from avion.domain.service.profile.repository.profile_repository import ProfileRepository
+from avion.domain.service.session.http_session import HttpSession
 from wsgi.middleware.router.router import Router
 from wsgi.wsgiapp import WsgiApplication
 
