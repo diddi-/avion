@@ -81,7 +81,3 @@ def setup_wsgi_app() -> WsgiApplication:
     app.add_middleware(router)
 
     return app
-
-if __name__ == "__main__":
-    dev_app = setup_wsgi_app()
-    dev_app.run_develop()

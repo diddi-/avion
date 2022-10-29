@@ -14,7 +14,8 @@ dependencies = [
     "werkzeug >=2.1, <2.2",
     "marshmallow",
     "Flask-CORS",
-    "flask-jwt-extended"
+    "flask-jwt-extended",
+    "click"
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -29,3 +30,6 @@ test = [
     "pylint>=2.15.4",
     "parameterized"
 ]
+
+[project.scripts]
+avion = "avion.api.cli.main:cli"

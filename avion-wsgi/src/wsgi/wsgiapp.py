@@ -6,6 +6,7 @@ from wsgi.http_method import HttpMethod
 from wsgi.http_request import HttpRequest
 from wsgi.middleware.endpoint.endpoint_middleware import EndpointMiddleware
 from wsgi.middleware.middleware import Middleware
+from wsgi.middleware.router.router import Router
 from wsgi.route_template import RouteTemplate
 
 
@@ -35,6 +36,13 @@ class WsgiApplication:
         self._middlewares.append(middleware)
 
     def run_develop(self, port: int = 8000) -> None:
+        print("Running in DEVELOPMENT mode")
         with make_server("localhost", port, self) as httpd:
             print(f"Serving on localhost:{port}...")
             httpd.serve_forever()
+
+    def get_routes(self) -> List[RouteTemplate]:
+        for mw in self._middlewares:
+            if isinstance(mw, Router):
+                return mw.get_routes()
+        return []
