@@ -2,7 +2,7 @@ from http import HTTPStatus
 from typing import Any, Dict, Optional, cast
 
 from avion.api.app import create_app
-from avion.domain.di.container import Container
+from wsgi.di.container import Container
 from avion.domain.service.account.repository.user_account_repository import UserAccountRepository
 from avion.domain.service.company.repository.company_repository import CompanyRepository
 from avion.domain.service.profile.repository.profile_repository import ProfileRepository

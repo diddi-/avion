@@ -1,17 +1,18 @@
 from http import HTTPStatus
 from typing import cast, Dict, Any, Tuple
 
+from flask import request, current_app
+from flask_restx import Namespace, Resource, Api
+from marshmallow import ValidationError
+
 from avion.api.http_exception import HttpException
 from avion.api.input.schema.create_user_account_params_schema import CreateUserAccountParamsSchema
 from avion.api.schema.user_account_schema import UserAccountSchema
-from avion.domain.di.container import Container
 from avion.domain.service.account.exceptions.duplicate_account_exception import DuplicateAccountException
 from avion.domain.service.account.model.create_user_account_params import CreateUserAccountParams
 from avion.domain.service.account.model.user_account import UserAccount
 from avion.domain.service.account.user_account_service import UserAccountService
-from flask import request, current_app
-from flask_restx import Namespace, Resource, Api
-from marshmallow import ValidationError
+from wsgi.di.container import Container
 
 namespace = Namespace("user_account")
 

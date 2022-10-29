@@ -16,7 +16,7 @@ from avion.api.controller.status_controller import StatusController
 from avion.api.controller.user_account_controller import namespace as account_namespace
 from avion.api.http_exception import HttpException
 from avion.domain.config.config import current_config
-from avion.domain.di.container import Container
+from wsgi.di.container import Container
 from avion.domain.service.account.repository.user_account_repository import UserAccountRepository
 from avion.domain.service.account.user_account_service import UserAccountService
 from avion.domain.service.company.company_service import CompanyService

@@ -1,6 +1,6 @@
 from typing import TypeVar, Generic, Type, Callable, Dict, Any, Optional
 
-from avion.domain.di.provider import Provider
+from wsgi.di.provider import Provider
 
 T = TypeVar("T")
 

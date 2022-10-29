@@ -13,6 +13,7 @@ def run():
     app = setup_wsgi_app()
     app.run_develop()
 
+
 @cli.command()
 def routes():
     app = setup_wsgi_app()

@@ -10,7 +10,7 @@ from avion.api.decorator.with_profile import with_profile
 from avion.api.http_exception import HttpException
 from avion.api.input.schema.create_company_params_schema import CreateCompanyParamsSchema
 from avion.api.schema.company_schema import CompanySchema
-from avion.domain.di.container import Container
+from wsgi.di.container import Container
 from avion.domain.service.company.company_service import CompanyService
 from avion.domain.service.company.exceptions.duplicate_company_exception import DuplicateCompanyException
 from avion.domain.service.company.model.company import Company

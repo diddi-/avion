@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from avion.domain.di.container import Container
+from wsgi.di.container import Container
 
 
 class TestContainer(TestCase):

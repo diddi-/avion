@@ -3,7 +3,7 @@ from typing import cast, Dict, Any
 from avion.api.http_exception import HttpException
 from avion.api.input.schema.login_request_schema import LoginRequestSchema
 from avion.api.schema.login_response_schema import LoginResponseSchema
-from avion.domain.di.container import Container
+from wsgi.di.container import Container
 from avion.domain.service.account.exceptions.login_failed_exception import LoginFailedException
 from avion.domain.service.account.model.login_request import LoginRequest
 from avion.domain.service.account.model.login_response import LoginResponse

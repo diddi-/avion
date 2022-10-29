@@ -4,7 +4,7 @@ from typing import cast, Dict, Any, List, Tuple
 from avion.api.http_exception import HttpException
 from avion.api.input.schema.create_profile_schema import CreateProfileSchema
 from avion.api.schema.private_profile_schema import PrivateProfileSchema
-from avion.domain.di.container import Container
+from wsgi.di.container import Container
 from avion.domain.service.profile.exceptions.duplicate_profile_exception import DuplicateProfileException
 from avion.domain.service.profile.model.create_profile_params import CreateProfileParams
 from avion.domain.service.profile.model.profile import Profile

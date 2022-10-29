@@ -1,8 +1,8 @@
 from inspect import signature
 from typing import TypeVar, Dict, Type, cast, Any
 
-from avion.domain.di.provider import Provider
-from avion.domain.di.using import Using
+from wsgi.di.provider import Provider
+from wsgi.di.using import Using
 
 T = TypeVar("T")
 

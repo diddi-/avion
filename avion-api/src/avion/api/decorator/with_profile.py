@@ -3,7 +3,7 @@ from http import HTTPStatus
 from typing import Callable, TypeVar, cast
 
 from avion.api.http_exception import HttpException
-from avion.domain.di.container import Container
+from wsgi.di.container import Container
 from avion.domain.service.profile.profile_service import ProfileService
 from avion.domain.service.session.http_session import HttpSession
 from flask import request, current_app
