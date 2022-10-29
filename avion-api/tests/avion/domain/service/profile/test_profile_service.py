@@ -18,4 +18,4 @@ class TestProfileService(TestCase):
 
         when(self.stubbed_profile_repo).get_profile_by_id(profile.id).thenReturn(profile)
         self.tested_service.add_company_role(profile.id, company_id, role)
-        self.assertTrue(profile.has_company_role(company_id, {CompanyRole.CEO}))
+        self.assertTrue(profile.has_company_role(company_id, [CompanyRole.CEO]))

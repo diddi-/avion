@@ -1,14 +1,16 @@
 from typing import cast
 
+from flask import request
+from flask_jwt_extended import jwt_required
+from flask_restx import Namespace, Resource, Api
+
 from avion.api.decorator.with_profile import with_profile
 from avion.api.input.schema.add_aircraft_params_schema import AddAircraftParamsSchema
 from avion.api.schema.aircraft_schema import AircraftSchema
 from avion.domain.service.fleet.fleet_service import FleetService
+from avion.domain.service.fleet.model.add_aircraft_params import AddAircraftParams
 from avion.domain.service.fleet.model.aircraft import Aircraft
 from avion.domain.service.profile.model.profile import Profile
-from flask import request
-from flask_jwt_extended import jwt_required
-from flask_restx import Namespace, Resource, Api
 
 namespace = Namespace("fleet")
 

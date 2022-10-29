@@ -22,7 +22,7 @@ class RouteTemplate:
         return self._raw_path
 
     def startswith(self, path: RouteTemplate) -> bool:
-        return self._raw_path.startswith(path._raw_path)
+        return self._raw_path.startswith(str(path))
 
     def __eq__(self, other: Any) -> bool:
         return isinstance(other, RouteTemplate) and self._raw_path == other._raw_path
@@ -35,7 +35,7 @@ class RouteTemplate:
 
     def strip(self, other: RouteTemplate) -> RouteTemplate:
         """ Weird method, removes beginning of urlpath"""
-        return RouteTemplate(self._raw_path.removeprefix(other._raw_path))
+        return RouteTemplate(self._raw_path.removeprefix(str(other)))
 
     def __add__(self, other: RouteTemplate) -> RouteTemplate:
         self_path = self._raw_path.removesuffix("/")

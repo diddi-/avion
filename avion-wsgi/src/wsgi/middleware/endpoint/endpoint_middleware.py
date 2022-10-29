@@ -6,9 +6,6 @@ from wsgi.middleware.middleware import Middleware
 
 
 class EndpointMiddleware(Middleware):
-    def __init__(self) -> None:
-        super().__init__()
-
     def handle_request(self, context: HttpContext) -> None:
         endpoint = context.get_endpoint()
         controller = endpoint.controller(context.request)

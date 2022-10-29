@@ -37,7 +37,7 @@ class ApiWorkflow:
         """ Create and automatically switch to using the new profile """
         service = self._client.container.get_instance(ProfileService)
         if self._account is None:
-            raise ValueError(f"Can't create profile without first creating an account")
+            raise ValueError("Can't create profile without first creating an account")
         self._profile = service.create_profile(CreateProfileParams(firstname, lastname, owner_id=self._account.id))
         self._client.switch_profile(self._profile.id)
         return self

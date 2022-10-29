@@ -83,5 +83,5 @@ def setup_wsgi_app() -> WsgiApplication:
     return app
 
 if __name__ == "__main__":
-    app = setup_wsgi_app()
-    app.run_develop()
+    dev_app = setup_wsgi_app()
+    dev_app.run_develop()

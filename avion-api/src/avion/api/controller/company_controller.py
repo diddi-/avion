@@ -1,6 +1,11 @@
 from http import HTTPStatus
 from typing import cast, List, Tuple
 
+from flask import request, current_app
+from flask_jwt_extended import jwt_required
+from flask_restx import Namespace, Resource, Api
+from marshmallow import ValidationError
+
 from avion.api.decorator.with_profile import with_profile
 from avion.api.http_exception import HttpException
 from avion.api.input.schema.create_company_params_schema import CreateCompanyParamsSchema
@@ -9,15 +14,10 @@ from avion.domain.di.container import Container
 from avion.domain.service.company.company_service import CompanyService
 from avion.domain.service.company.exceptions.duplicate_company_exception import DuplicateCompanyException
 from avion.domain.service.company.model.company import Company
+from avion.domain.service.company.model.create_company_params import CreateCompanyParams
 from avion.domain.service.company.repository.company_repository import CompanyRepository
 from avion.domain.service.profile.model.profile import Profile
 from avion.domain.service.session.http_session import HttpSession
-from flask import request, current_app
-from flask_jwt_extended import jwt_required
-from flask_restx import Namespace, Resource, Api
-from marshmallow import ValidationError
-
-from avion.domain.service.company.model.create_company_params import CreateCompanyParams
 
 namespace = Namespace("company")
 
@@ -37,7 +37,7 @@ class CompanyController(Resource):  # type: ignore
     @namespace.marshal_with(CompanySchema.as_namespace_model(namespace))  # type: ignore
     @jwt_required()  # type: ignore
     @with_profile()
-    def post(self, profile: Profile) -> Tuple[Company, HTTPStatus]:
+    def post(self, profile: Profile) -> Tuple[Company, int]:
         data = request.json
         try:
             params = cast(CreateCompanyParams, CreateCompanyParamsSchema().load(data))  # type: ignore
