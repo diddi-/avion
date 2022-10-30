@@ -1,6 +1,7 @@
 from typing import List, Iterator, Dict, Any
 from wsgiref.simple_server import make_server
 
+from wsgi.di.container import Container
 from wsgi.http_context import HttpContext
 from wsgi.http_method import HttpMethod
 from wsgi.http_request import HttpRequest
@@ -13,6 +14,7 @@ from wsgi.route_template import RouteTemplate
 class WsgiApplication:
     def __init__(self) -> None:
         self._middlewares: List[Middleware] = []
+        self._container = Container()
 
     # start_response from wsgi spec is very strange. There is no annotations for it and no type hinting on earth will
     # satisfy mypy. We could import wsgiref.type.StartResponse which will make mypy happy but that fails at runtime

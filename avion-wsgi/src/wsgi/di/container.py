@@ -8,8 +8,12 @@ T = TypeVar("T")
 
 
 class Container:
+    # Ideally we don't want to use class variables. But at the moment our DI system will always create new instances
+    # so this is a way to keep state between multiple instances of a Container. It's *bad*, yes, but one thing at the
+    # time.
+    _providers: Dict[Any, Provider[Any]] = {}
     def __init__(self) -> None:
-        self._providers: Dict[Any, Provider[Any]] = {}
+        self.resolve(Container).using(Container)
 
     def _provider_callback(self, provider: Provider[Any]) -> None:
         self._providers[provider.provides_for] = provider
